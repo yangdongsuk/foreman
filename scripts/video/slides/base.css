@@ -1,0 +1,123 @@
+/* Shared theme for all slide templates (and the terminal / caption frames). Edit tokens here to re-skin everything. */
+:root {
+  --bg: #0a0f1f;
+  --bg-deep: #070b17;
+  --surface: rgba(18, 26, 56, 0.72);
+  --surface-solid: #121a38;
+  --border: rgba(160, 175, 255, 0.18);
+  --text: #f4f6ff;
+  --soft: #cdd5f3;
+  --muted: #9aa7d1;
+  --faint: #6c79a6;
+  --accent: #7c5cff; /* brand purple */
+  --accent-soft: #a894ff;
+  --usdc: #2775ca; /* USDC blue */
+  --usdc-soft: #5fa3ec;
+  --ok: #45e0a0;
+  --warn: #ffb454;
+  --danger: #ff6b81;
+  --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: "SF Mono", ui-monospace, Menlo, Monaco, "JetBrains Mono", Consolas, "Liberation Mono", monospace;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); }
+body {
+  font-family: var(--font);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+.sub:empty, .kicker:empty, .chips:empty, .note:empty { display: none; } /* unused optional slots collapse */
+
+/* ---------------------------------------------------------------- stage */
+.slide {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  padding: 92px 128px 0;
+  overflow: hidden;
+  background:
+    radial-gradient(1200px 760px at 10% -10%, rgba(124, 92, 255, 0.32), transparent 62%),
+    radial-gradient(1000px 700px at 104% 110%, rgba(39, 117, 202, 0.30), transparent 64%),
+    linear-gradient(180deg, #0b1124 0%, var(--bg-deep) 100%);
+}
+.slide::before { /* faint engineering grid, fading toward the edges */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(150, 165, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(150, 165, 255, 0.055) 1px, transparent 1px);
+  background-size: 64px 64px;
+  -webkit-mask-image: radial-gradient(ellipse 75% 70% at 50% 42%, #000 15%, transparent 80%);
+  mask-image: radial-gradient(ellipse 75% 70% at 50% 42%, #000 15%, transparent 80%);
+  pointer-events: none;
+}
+.slide > * { position: relative; }
+
+/* content never goes below this line: the caption lane + footer live underneath */
+.content { height: 770px; display: flex; flex-direction: column; }
+.content > * { flex-shrink: 0; }
+.center { margin: auto 0; display: flex; flex-direction: column; } /* auto margins: centred if it fits, top-aligned (never clipped) if not */
+.center > * { flex-shrink: 0; }
+
+/* ---------------------------------------------------------------- type */
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  align-self: flex-start;
+  font-size: 22px;
+  font-weight: 650;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent-soft);
+}
+.kicker::before {
+  content: "";
+  width: 34px;
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--usdc));
+}
+h1, h2 { margin: 0; letter-spacing: -0.03em; text-wrap: balance; }
+strong { color: var(--accent-soft); font-weight: inherit; }
+code { font-family: var(--mono); font-size: 0.88em; padding: 0.08em 0.38em; border-radius: 8px; background: rgba(124, 92, 255, 0.16); color: var(--text); }
+.grad {
+  background: linear-gradient(92deg, #ffffff 0%, #e8e3ff 42%, #a894ff 78%, #6fb0f2 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------------------------------------------------------------- footer */
+.footer {
+  position: absolute;
+  left: 128px;
+  right: 128px;
+  bottom: 22px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 18px;
+  letter-spacing: 0.02em;
+  color: var(--faint);
+}
+.footer .brand { display: inline-flex; align-items: center; gap: 10px; color: var(--muted); font-weight: 650; }
+.footer .brand svg { width: 22px; height: 22px; }
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(124, 92, 255, 0.10);
+  font-size: 22px;
+  font-weight: 560;
+  color: var(--soft);
+}
+.pill i { width: 9px; height: 9px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 12px var(--ok); }

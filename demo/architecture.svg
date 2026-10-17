@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 860" font-family="Inter, -apple-system, Segoe UI, sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#c7cdea"/>
+    </marker>
+    <marker id="g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#34d399"/>
+    </marker>
+    <style>
+      .box{fill:#121a33;stroke:#3b4a7a;stroke-width:2;rx:18}
+      .key{fill:#1b1640;stroke:#7C5CFF;stroke-width:3}
+      .esc{fill:#0f2140;stroke:#2775CA;stroke-width:3}
+      .t{fill:#f4f6ff;font-size:30px;font-weight:700}
+      .s{fill:#aab3d6;font-size:21px}
+      .l{fill:#c7cdea;font-size:19px}
+      .lg{fill:#6ee7b7;font-size:19px;font-weight:600}
+      .ln{stroke:#c7cdea;stroke-width:2.2;fill:none}
+      .lng{stroke:#34d399;stroke-width:2.6;fill:none}
+    </style>
+  </defs>
+
+  <!-- owner -->
+  <rect class="box" x="40" y="70" width="300" height="130" rx="18"/>
+  <text class="t" x="70" y="122">Owner</text>
+  <text class="s" x="70" y="158">the business</text>
+  <text class="s" x="70" y="184">writes the brief, funds jobs</text>
+
+  <!-- freelancer -->
+  <rect class="box" x="40" y="620" width="300" height="130" rx="18"/>
+  <text class="t" x="70" y="672">Freelancer</text>
+  <text class="s" x="70" y="708">submits a PR or a URL</text>
+  <text class="s" x="70" y="734">per milestone</text>
+
+  <!-- policy -->
+  <rect class="key" x="520" y="40" width="480" height="262" rx="20"/>
+  <text class="t" x="550" y="90">ForemanPolicy</text>
+  <text class="s" x="550" y="122">the agent's on-chain mandate</text>
+  <text class="l" x="550" y="160">• auto-approve cap per milestone</text>
+  <text class="l" x="550" y="186">• daily release cap</text>
+  <text class="l" x="550" y="212">• owner co-sign above the cap</text>
+  <text class="l" x="550" y="238">• kill switch (setPaused)</text>
+  <text class="l" x="550" y="264">• reasonHash emitted on every action</text>
+
+  <!-- stagepay -->
+  <rect class="esc" x="520" y="430" width="480" height="150" rx="20"/>
+  <text class="t" x="550" y="482">Stagepay escrow</text>
+  <text class="s" x="550" y="516">milestones held in USDC / EURC</text>
+  <text class="s" x="550" y="544">policy = the only client</text>
+
+  <!-- agent -->
+  <rect class="key" x="1180" y="50" width="380" height="210" rx="20"/>
+  <text class="t" x="1210" y="102">Foreman agent</text>
+  <text class="s" x="1210" y="136">plan → review loop → decide</text>
+  <text class="l" x="1210" y="172">guardrails in code override</text>
+  <text class="l" x="1210" y="198">the model; decision record</text>
+  <text class="l" x="1210" y="224">is hashed (keccak256)</text>
+
+  <!-- tollgate + tools -->
+  <rect class="esc" x="1180" y="400" width="380" height="110" rx="20"/>
+  <text class="t" x="1210" y="448">Tollgate channel</text>
+  <text class="s" x="1210" y="482">owner-funded · session key holds 0</text>
+
+  <rect class="box" x="1180" y="620" width="380" height="130" rx="18"/>
+  <text class="t" x="1210" y="672">Tool server</text>
+  <text class="s" x="1210" y="706">HTTP 402 · http-check · github</text>
+  <text class="s" x="1210" y="732">rubric (LLM judge)</text>
+
+  <!-- arrows -->
+  <path class="ln" d="M340 120 L515 120" marker-end="url(#a)"/>
+  <text class="l" x="352" y="108">fundJob · cosign</text>
+  <text class="l" x="352" y="150">setPaused</text>
+
+  <path class="ln" d="M760 304 L760 425" marker-end="url(#a)"/>
+  <text class="l" x="772" y="352">createJob · approve</text>
+  <text class="l" x="772" y="378">requestRevision</text>
+
+  <path class="ln" d="M1178 155 L1004 155" marker-end="url(#a)"/>
+  <text class="l" x="1010" y="140">agentApprove ·</text>
+  <text class="l" x="1010" y="190">revise · escalate</text>
+
+  <path class="ln" d="M342 660 L515 540" marker-end="url(#a)"/>
+  <text class="l" x="350" y="590">submit(note)</text>
+
+  <path class="lng" d="M518 560 L346 700" marker-end="url(#g)"/>
+  <text class="lg" x="420" y="700">USDC paid</text>
+
+  <path class="ln" d="M1370 262 L1370 395" marker-end="url(#a)"/>
+  <text class="l" x="1382" y="320">vouchers per call</text>
+  <text class="l" x="1382" y="346">(EIP-712)</text>
+
+  <path class="ln" d="M1370 512 L1370 615" marker-end="url(#a)"/>
+  <text class="l" x="1382" y="572">redeem in batches</text>
+
+
+  <!-- decision log pill -->
+  <rect x="520" y="660" width="480" height="90" rx="45" fill="#0d2a22" stroke="#34d399" stroke-width="2"/>
+  <text class="lg" x="548" y="700">decision record → keccak256 → reasonHash</text>
+  <text class="l" x="548" y="728">re-verified by the public dashboard</text>
+</svg>

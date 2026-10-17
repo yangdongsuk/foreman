@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{heading}}</title>
+<!-- vars: heading, links (list of {label, url}, max 4), subheading?, cta?, kicker?, brand?, footer? -->
+<link rel="stylesheet" href="base.css">
+<style>
+  h1.heading { margin-top: 18px; font-size: 96px; line-height: 1.04; font-weight: 800; letter-spacing: -0.03em; max-width: 1450px; max-height: 330px; overflow: hidden; padding-bottom: 0.05em; }
+  .sub { margin: 18px 0 0; font-size: 34px; line-height: 1.3; color: var(--soft); max-width: 1300px; max-height: 92px; overflow: hidden; }
+  .links { margin-top: 38px; display: flex; flex-direction: column; gap: 12px; max-width: 1240px; }
+  .link {
+    display: flex; align-items: baseline; gap: 36px; padding: 15px 30px;
+    border-radius: 18px; border: 1px solid var(--border); background: var(--surface); position: relative; overflow: hidden;
+  }
+  .link::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: linear-gradient(180deg, var(--accent), var(--usdc)); }
+  .link .label { flex: none; width: 250px; font-size: 20px; font-weight: 650; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .link .url { font-family: var(--mono); font-size: 30px; font-weight: 560; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .note { margin-top: 32px; align-self: flex-start; padding: 16px 30px; border-radius: 999px; font-size: 28px; font-weight: 650; color: #fff;
+    background: linear-gradient(95deg, var(--accent), var(--usdc)); box-shadow: 0 14px 40px rgba(124, 92, 255, 0.35); }
+  .mark { position: absolute; right: 110px; top: 120px; width: 400px; height: 400px; opacity: 0.16; }
+</style>
+</head>
+<body>
+<div class="slide">
+  <svg class="mark" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4 L40 10 V23 C40 33 33 40 24 44 C15 40 8 33 8 23 V10 Z" fill="none" stroke="#a894ff" stroke-width="2.2" stroke-linejoin="round"/><path d="M16 24 l6 6 l11 -12" fill="none" stroke="#5fa3ec" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <div class="content"><div class="center">
+    <div class="kicker">{{kicker|Try it}}</div>
+    <h1 class="heading grad" data-fit data-fit-min="56">{{heading}}</h1>
+    <p class="sub">{{subheading|}}</p>
+    <div class="links">{{#each links max=4}}<div class="link"><span class="label">{{this.label}}</span><span class="url">{{this.url}}</span></div>{{/each}}</div>
+    <div class="note">{{cta|}}</div>
+  </div></div>
+  <div class="footer">
+    <span class="brand"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="13" fill="#7c5cff"/><path d="M24 10 L35 14 V24 C35 31 30 36 24 39 C18 36 13 31 13 24 V14 Z" fill="none" stroke="#fff" stroke-width="3.4" stroke-linejoin="round"/><path d="M19 24 l4 4 l7 -8" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>{{brand|Foreman}}</span>
+    <span>{{footer|Spending limits enforced on-chain · Built on Arc with USDC gas}}</span>
+  </div>
+</div>
+<script src="base.js"></script>
+</body>
+</html>

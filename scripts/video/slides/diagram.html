@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{heading}}</title>
+<!-- vars: heading, diagram (raw SVG markup, or {"$file": "path.svg"}), subheading?, kicker?, brand?, footer? -->
+<link rel="stylesheet" href="base.css">
+<style>
+  .content { gap: 0; }
+  h2.heading { margin-top: 18px; font-size: 64px; line-height: 1.08; font-weight: 750; max-height: 140px; overflow: hidden; }
+  .sub { margin: 14px 0 0; font-size: 28px; line-height: 1.35; color: var(--muted); max-height: 78px; overflow: hidden; }
+  .panel {
+    flex: 1; min-height: 0; margin-top: 30px; padding: 20px 28px;
+    border-radius: 28px; border: 1px solid var(--border); background: var(--surface);
+    box-shadow: 0 30px 80px rgba(3, 6, 20, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    display: flex;
+  }
+  .diagram { flex: 1; min-width: 0; min-height: 0; display: flex; }
+  .diagram svg { width: 100%; height: 100%; font-family: var(--font); }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="content">
+    <div class="kicker">{{kicker|Architecture}}</div>
+    <h2 class="heading" data-fit data-fit-min="36">{{heading}}</h2>
+    <p class="sub">{{subheading|}}</p>
+    <div class="panel"><div class="diagram">{{{diagram}}}</div></div>
+  </div>
+  <div class="footer">
+    <span class="brand"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="13" fill="#7c5cff"/><path d="M24 10 L35 14 V24 C35 31 30 36 24 39 C18 36 13 31 13 24 V14 Z" fill="none" stroke="#fff" stroke-width="3.4" stroke-linejoin="round"/><path d="M19 24 l4 4 l7 -8" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>{{brand|Foreman}}</span>
+    <span>{{footer|Spending limits enforced on-chain · Built on Arc with USDC gas}}</span>
+  </div>
+</div>
+<script src="base.js"></script>
+</body>
+</html>

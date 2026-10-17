@@ -1,0 +1,5 @@
+# local toolchain + build products (never commit)
+.venv/
+node_modules/
+cache/
+out/

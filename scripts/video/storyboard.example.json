@@ -1,0 +1,84 @@
+{
+  "title": "Foreman demo (sample)",
+  "voice": "en-US-AndrewNeural",
+  "rate": "+5%",
+  "crossfade": 0.3,
+  "captions": true,
+  "segments": [
+    {
+      "type": "slide",
+      "html": "slides/title.html",
+      "vars": {
+        "product": "Foreman",
+        "pitch": "An AI agent that runs freelance contracts inside spending limits a smart contract enforces.",
+        "kicker": "AI agent · Arc · USDC",
+        "chips": ["Limits enforced on-chain", "Pays for its own tools in USDC", "Every decision hashed"]
+      },
+      "narration": "Meet Foreman. An AI agent that runs freelance contracts for you, inside spending limits that a smart contract enforces."
+    },
+    {
+      "type": "slide",
+      "html": "slides/diagram.html",
+      "vars": {
+        "heading": "The agent proposes. The contract **decides what is allowed.**",
+        "subheading": "ForemanPolicy on Arc caps what the agent can release, per milestone and per day.",
+        "diagram": { "$file": "samples/architecture.svg" }
+      },
+      "narration": "The owner funds each job through a policy contract on Arc. The agent can only approve what that contract allows."
+    },
+    {
+      "type": "terminal",
+      "log": "samples/review.ansi.log",
+      "title": "foreman review --job 3",
+      "command": "foreman review --job 3",
+      "reveal": "lines",
+      "narration": "Here is a review in action. The agent verifies the plan, pays fractions of a cent for its own tools, checks every criterion, and releases the payment on chain."
+    },
+    {
+      "type": "screenshot",
+      "url": "samples/dashboard-mock.html",
+      "delay": 1.5,
+      "waitFor": "#timeline .decision",
+      "kenburns": "in",
+      "zoom": 1.08,
+      "focus": [0.52, 0.45],
+      "narration": "The dashboard recomputes every decision hash in the browser, so nothing can be edited after the fact."
+    },
+    {
+      "type": "image",
+      "path": "samples/policy-card.png",
+      "fit": "blur",
+      "kenburns": "out",
+      "narration": "Limits are enforced by the contract, not by the prompt."
+    },
+    {
+      "type": "slide",
+      "html": "slides/bullets.html",
+      "vars": {
+        "heading": "Why it is safe to hand over a budget",
+        "kicker": "Guardrails",
+        "bullets": [
+          "Caps live in a **smart contract**, not in a prompt",
+          "The agent's key holds **gas only**, never job money",
+          "The owner's **kill switch** stops everything instantly"
+        ]
+      },
+      "narration": "Three things make it safe to hand an agent a budget."
+    },
+    {
+      "type": "slide",
+      "html": "slides/closing.html",
+      "vars": {
+        "heading": "Spending limits an agent **cannot break.**",
+        "subheading": "Read the code, watch the decisions, verify the hashes.",
+        "links": [
+          { "label": "Code", "url": "github.com/yangdongsuk/foreman" },
+          { "label": "Dashboard", "url": "yangdongsuk.github.io/foreman" },
+          { "label": "Network", "url": "Arc mainnet · USDC gas" }
+        ],
+        "cta": "Try it on Arc mainnet"
+      },
+      "narration": "Foreman. Spending limits an agent cannot break."
+    }
+  ]
+}

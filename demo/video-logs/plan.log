@@ -1,0 +1,31 @@
+
+[1m[36m FOREMAN [0m[0m [90m|[0m [1mplan[0m[90m  model claude-cli:sonnet[0m
+[90m────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+  [90mbrief         [0m
+    Localize Foreman's documentation for our Korean freelancers. Milestone 1 (0.05 USDC):
+    README.ko.md, a complete and natural Korean translation of README.md that keeps every section
+    including the limits table, submitted as a pull request to github.com/yangdongsuk/foreman.
+    Milestone 2 (0.15 USDC): a Korean landing page published at
+    https://yangdongsuk.github.io/foreman/ko.html that explains how Foreman works, lists the limits
+    the contract enforces, and links to the dashboard and the Korean README. Three days per
+    milestone.
+  [90mbudget        [0mup to 0.2 USDC
+  [90magent limit   [0mauto-approves up to 0.1 USDC per milestone
+
+  [90m…[0m drafting scope, milestones and acceptance criteria
+
+[1m[1mKorean localization of Foreman documentation[0m[0m
+  Two sequential milestones: (1) a complete Korean README.ko.md submitted as a pull request to
+  yangdongsuk/foreman, and (2) a Korean landing page at
+  https://yangdongsuk.github.io/foreman/ko.html explaining how Foreman works, listing enforced
+  contract limits, and linking to the dashboard and the Korean README. Total 0.2 USDC, 3 days per
+  milestone.
+
+  [90m#[0m  [90mmilestone          [0m  [90mUSDC[0m  [90mdue[0m  [90mapproval     [0m
+  1  [1mKorean README[0m        0.05   3d  [32magent auto[0m   
+  2  [1mKorean landing page[0m  0.15   3d  [33mowner co-sign[0m
+  [90mtotal         [0m[1m0.2 USDC[0m of 0.2 USDC budget   review period 48 h
+
+  [32m✓[0m signed off. terms hash [1m0x92e83f085e62697eb5839189f3a50da70c3d68be99dc6fa0903ede42846cef14[0m
+  [90msaved         [0mplans/0x92e83f085e62697eb5839189f3a50da70c3d68be99dc6fa0903ede42846cef14.json
+  [90mnext          [0m[36mforeman fund --plan 0x92e83f085e62697eb5839189f3a50da70c3d68be99dc6fa0903ede42846cef14 --freelancer <address>[0m

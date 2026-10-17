@@ -2,7 +2,7 @@
 
 **An AI agent that runs freelance contracts for a small business, inside spending limits a smart contract enforces.** USDC on Arc.
 
-**Live dashboard:** https://yangdongsuk.github.io/foreman/ · **Demo video:** [VIDEO_LINK] · **Contracts:** see [Deployment](#deployment-arc-mainnet)
+**Live dashboard:** https://yangdongsuk.github.io/foreman/ · **Demo video:** [YouTube (2:35)](https://youtu.be/VLXhugGEiH0) · [mp4](https://github.com/yangdongsuk/foreman/releases/download/v0.1.0-demo/foreman-demo.mp4) · **Contracts:** see [Deployment](#deployment-arc-mainnet)
 
 Foreman drafts the scope and milestones from a plain-English brief, escrows the money, reviews every delivery with paid tools, and then approves it, sends it back with concrete feedback, or hands it to the owner. It can only release money that the owner already escrowed, only up to an auto-approve cap and a daily cap, and only for work the freelancer actually submitted. Anything bigger needs the owner's co-signature, and a kill switch stops it instantly. Every decision comes with its reasoning, and the hash of that reasoning is written on chain.
 

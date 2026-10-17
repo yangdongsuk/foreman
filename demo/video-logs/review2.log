@@ -1,0 +1,23 @@
+[1mReview loop[0m
+  [35m◆[0m [2mstep 1[0m  Need evidence: inspect the PR for changed files and diff.
+    [36m→[0m [1mgithub[0m [90m{"url":"https://github.com/yangdongsuk/foreman/pull/1"}[0m  [90mpay 0.002 USDC[0m
+    [32m✓[0m PR "Add Korean README (README.ko.md)" open · +114/-0 in 1 files…  [90m1336 ms · spent 0.002 USDC[0m
+  [35m◆[0m [2mstep 2[0m  The diff excerpt is truncated and I lack the original README.md to compare headings, …
+    [36m→[0m [1mhttp-check[0m [90m{"url":"https://raw.githubusercontent.com/yangdongsuk/forem…[0m  [90mpay 0.001 USDC[0m
+    [32m✓[0m HTTP 200 · 9038 bytes · 48 ms  [90m142 ms · spent 0.003 USDC[0m
+  [35m◆[0m [2mstep 3[0m  The PR diff excerpt is cut off before the end of README.ko.md, so I can't see the las…
+    [36m→[0m [1mhttp-check[0m [90m{"url":"https://raw.githubusercontent.com/yangdongsuk/forem…[0m  [90mpay 0.001 USDC[0m
+    [32m✓[0m HTTP 200 · 11703 bytes · 279 ms  [90m444 ms · spent 0.004 USDC[0m
+  [35m◆[0m [2mstep 4[0m  Evidence from the GitHub PR and raw files covers all criteria. Approval is within the…
+
+[1mDecision[0m
+  [1;30;42m APPROVE [0m  [1m0.05 USDC[0m
+    PR #1 targets yangdongsuk/foreman (base main) and changes only README.ko.md. The raw file has
+    all 11 headings of README.md in the same order, the 8-row limits table with the same values,
+    Korean prose, and matching code blocks and links. The 0.05 USDC amount is within the 0.1 cap and
+    the 0.15 allowance.
+
+  [90mtool spend    [0m0.004 USDC
+  [90mreason hash   [0m[1m0xc733826e38076b6308431cbe817ed1c8fd5360ee328187b4ed0679b15185fe51[0m
+  [90mon chain      [0m[32m✓[0m approve sent by the agent key
+  [90mtx            [0m[34mhttps://explorer.arc.io/tx/0x68f3a00f44fbbe143160ea4f8bb39883737b9f36983d87e4da8bff80fc590043[0m

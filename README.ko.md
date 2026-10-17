@@ -2,7 +2,7 @@
 
 **스마트 컨트랙트가 강제하는 지출 한도 안에서 소규모 사업체의 프리랜서 계약을 관리하는 AI 에이전트.** Arc 기반, USDC 정산.
 
-**라이브 대시보드:** https://yangdongsuk.github.io/foreman/ · **데모 영상:** [VIDEO_LINK] · **컨트랙트:** [배포](#배포-arc-메인넷) 섹션 참고
+**라이브 대시보드:** https://yangdongsuk.github.io/foreman/ · **데모 영상:** [YouTube (2:35)](https://youtu.be/VLXhugGEiH0) · [mp4](https://github.com/yangdongsuk/foreman/releases/download/v0.1.0-demo/foreman-demo.mp4) · **컨트랙트:** [배포](#배포-arc-메인넷) 섹션 참고
 
 Foreman은 평이한 영어로 쓴 브리프를 바탕으로 작업 범위와 마일스톤 초안을 작성하고, 대금을 에스크로에 예치하고, 모든 납품물을 유료 도구로 검수합니다. 검수가 끝나면 승인하거나, 구체적인 피드백을 붙여 수정을 요청하거나, 오너에게 넘깁니다. Foreman이 지급할 수 있는 돈은 오너가 이미 에스크로에 넣어 둔 금액뿐입니다. 지급은 자동 승인 한도와 일일 한도 안에서만, 그리고 프리랜서가 실제로 제출한 작업에 대해서만 가능합니다. 한도를 넘는 금액은 오너의 공동 서명이 필요하고, 킬 스위치를 누르면 Foreman은 즉시 멈춥니다. 모든 결정에는 판단 근거가 함께 남고, 그 근거의 해시는 온체인에 기록됩니다.
 

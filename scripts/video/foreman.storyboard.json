@@ -1,0 +1,160 @@
+{
+  "title": "Foreman — Tameion demo",
+  "voice": "en-US-AndrewNeural",
+  "rate": "+6%",
+  "crossfade": 0.3,
+  "captions": true,
+  "segments": [
+    {
+      "type": "slide",
+      "html": "slides/title.html",
+      "vars": {
+        "product": "Foreman",
+        "pitch": "An AI agent that runs freelance contracts inside spending limits a smart contract enforces.",
+        "kicker": "Tameion Agents Hackathon · Arc mainnet · USDC",
+        "chips": [
+          "Limits enforced on-chain",
+          "Pays for its own tools per call",
+          "Every decision hashed on chain"
+        ]
+      },
+      "narration": "This is Foreman: an AI agent that runs freelance contracts for a small business, inside spending limits that a smart contract enforces. It's live on Arc mainnet, settled in USDC."
+    },
+    {
+      "type": "slide",
+      "html": "slides/bullets.html",
+      "vars": {
+        "kicker": "The problem",
+        "heading": "Today an agent's budget is **a sentence in its prompt.**",
+        "bullets": [
+          "Small businesses already pay contractors **per milestone**",
+          "An agent could write the scope, check deliveries and release payments",
+          "But one prompt injection or one wrong **\"looks good\"** can drain its wallet"
+        ]
+      },
+      "narration": "Small businesses already pay contractors per milestone, and an agent could do most of that work. What stops them is the wallet. Today an agent's budget is a sentence in its prompt, so one prompt injection, or one wrong 'looks good', can drain it."
+    },
+    {
+      "type": "slide",
+      "html": "slides/diagram.html",
+      "vars": {
+        "heading": "The model proposes. **The contract decides what is allowed.**",
+        "subheading": "ForemanPolicy is the escrow's only client. The agent never holds job money.",
+        "diagram": {
+          "$file": "../../demo/architecture.svg"
+        }
+      },
+      "narration": "Foreman moves the budget into a contract. The owner funds every job through ForemanPolicy, which becomes the escrow's only client. The agent can approve a submitted milestone only under an auto-approve cap and a daily cap. Anything bigger needs the owner's co-signature, and a kill switch stops it instantly. And the agent pays for its own research per call, with Tollgate vouchers signed by a session key that holds nothing."
+    },
+    {
+      "type": "terminal",
+      "log": "../../demo/video-logs/plan.log",
+      "title": "foreman plan --budget 0.2",
+      "command": "foreman plan --brief \"Localize Foreman's docs for our Korean freelancers ...\" --budget 0.2",
+      "reveal": "lines",
+      "narration": "Here's the first real job, on Arc mainnet. The owner writes a brief. Foreman drafts the milestones and acceptance criteria, notices that milestone two is above its cap and will need a co-signature, and hashes the plan."
+    },
+    {
+      "type": "terminal",
+      "log": "../../demo/video-logs/fund.log",
+      "title": "foreman fund --plan 0x92e8…",
+      "command": "foreman fund --plan 0x92e83f08… --freelancer 0x227f…663A",
+      "reveal": "lines",
+      "narration": "Funding goes through the policy contract, so the money sits in escrow, never with the agent."
+    },
+    {
+      "type": "terminal",
+      "log": "../../demo/video-logs/review1.log",
+      "title": "foreman review --job 2 --index 0",
+      "command": "foreman review --job 2 --index 0",
+      "reveal": "lines",
+      "narration": "Our test freelancer submits a pull request with a Korean translation of the README, but leaves out a table. Foreman pays a fraction of a cent for each tool call, inspects the pull request, spots the missing table, and sends the work back with a concrete note, on chain."
+    },
+    {
+      "type": "terminal",
+      "log": "../../demo/video-logs/review2.log",
+      "title": "foreman review --job 2 --index 0   (after the fix)",
+      "command": "foreman review --job 2 --index 0",
+      "reveal": "lines",
+      "narration": "After the fix, it reads both files in full, checks every criterion, and approves. The contract checks the cap and the daily allowance, and the freelancer is paid instantly, in USDC."
+    },
+    {
+      "type": "terminal",
+      "log": "../../demo/video-logs/review3.log",
+      "title": "foreman review --job 2 --index 1  →  foreman cosign",
+      "command": "foreman review --job 2 --index 1",
+      "reveal": "lines",
+      "narration": "Milestone two is above the cap, and the agent also says it couldn't verify the link targets. So instead of guessing, it escalates. The owner checks the flagged links and co-signs."
+    },
+    {
+      "type": "terminal",
+      "log": "../../demo/video-logs/kill.log",
+      "title": "foreman pause · limits · resume",
+      "command": "foreman pause",
+      "reveal": "lines",
+      "narration": "And one call to the kill switch makes the contract reject every agent action, until the owner resumes it."
+    },
+    {
+      "type": "image",
+      "path": "../../demo/video-assets/dashboard-timeline.png",
+      "fit": "blur",
+      "kenburns": "in",
+      "zoom": 1.05,
+      "focus": [
+        0.35,
+        0.4
+      ],
+      "narration": "Every decision is public. The dashboard reads the chain and shows the reasoning behind each transaction, criterion by criterion."
+    },
+    {
+      "type": "image",
+      "path": "../../demo/video-assets/dashboard-approved.png",
+      "fit": "blur",
+      "kenburns": "out",
+      "zoom": 1.05,
+      "focus": [
+        0.6,
+        0.5
+      ],
+      "narration": "It also recomputes each record's hash in your browser and checks it against the chain, so nobody can quietly edit the record later."
+    },
+    {
+      "type": "slide",
+      "html": "slides/bullets.html",
+      "vars": {
+        "kicker": "Circle stack on Arc",
+        "heading": "USDC is the gas **and** the settlement asset.",
+        "bullets": [
+          "Agent key holds **cents of USDC** for gas; the session key holds **nothing**",
+          "Escrow in **USDC or EURC**, sub-second finality",
+          "Three contracts on Arc mainnet, **verified on Sourcify**"
+        ]
+      },
+      "narration": "On Arc, USDC is both the gas and the settlement asset, so the agent's key needs only cents and the session key needs nothing. Escrow takes USDC or EURC, finality is sub-second, and all three contracts are verified on Sourcify."
+    },
+    {
+      "type": "slide",
+      "html": "slides/closing.html",
+      "vars": {
+        "heading": "Spending limits an agent **cannot break.**",
+        "subheading": "Read the code, watch the decisions, verify the hashes.",
+        "links": [
+          {
+            "label": "Code",
+            "url": "github.com/yangdongsuk/foreman"
+          },
+          {
+            "label": "Dashboard",
+            "url": "yangdongsuk.github.io/foreman"
+          },
+          {
+            "label": "Policy",
+            "url": "0x2065…68E2 on Arc mainnet"
+          }
+        ],
+        "cta": "Built during Tameion"
+      },
+      "narration": "Foreman is open source. Read the code, watch the decisions, and verify the hashes yourself."
+    }
+  ]
+}

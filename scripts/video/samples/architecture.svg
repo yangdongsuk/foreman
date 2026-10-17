@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 560" role="img" aria-label="Foreman architecture">
+  <style>
+    .fm-t  { font: 700 29px Inter, system-ui, -apple-system, "Segoe UI", sans-serif; fill: #f4f6ff; }
+    .fm-s  { font: 500 20px Inter, system-ui, -apple-system, "Segoe UI", sans-serif; fill: #9aa7d1; }
+    .fm-l  { font: 600 19px Inter, system-ui, -apple-system, "Segoe UI", sans-serif; fill: #cdd5f3; }
+    .fm-p  { font: 700 16px Inter, system-ui, -apple-system, "Segoe UI", sans-serif; fill: #fff; letter-spacing: .08em; }
+    .fm-box  { fill: #141c3d; stroke: rgba(160,175,255,.38); stroke-width: 2; }
+    .fm-hot  { fill: url(#fm-hot); stroke: #7c5cff; stroke-width: 3; }
+    .fm-line { fill: none; stroke: #8f9cc9; stroke-width: 2.6; marker-end: url(#fm-arrow); }
+    .fm-dash { fill: none; stroke: #6f7fb8; stroke-width: 2.2; stroke-dasharray: 7 7; marker-end: url(#fm-arrow); }
+    .fm-usdc { fill: #2775ca; }
+    .fm-arc  { fill: #7c5cff; }
+  </style>
+  <defs>
+    <linearGradient id="fm-hot" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2a2170"/><stop offset="1" stop-color="#17265e"/>
+    </linearGradient>
+    <marker id="fm-arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#8f9cc9"/>
+    </marker>
+  </defs>
+
+  <!-- row 1 -->
+  <rect class="fm-box" x="30" y="50" width="260" height="140" rx="20"/>
+  <text class="fm-t" x="56" y="105">Owner</text>
+  <text class="fm-s" x="56" y="140">writes the brief</text>
+  <text class="fm-s" x="56" y="167">funds jobs, can pause</text>
+
+  <rect class="fm-hot" x="470" y="30" width="440" height="180" rx="22"/>
+  <rect class="fm-arc" x="494" y="50" width="62" height="28" rx="14"/>
+  <text class="fm-p" x="525" y="70" text-anchor="middle">ARC</text>
+  <text class="fm-t" x="494" y="120">ForemanPolicy</text>
+  <text class="fm-s" x="494" y="153">autoApproveCap · dailyCap · pause</text>
+  <text class="fm-s" x="494" y="180">limits enforced by the contract</text>
+
+  <rect class="fm-box" x="1060" y="50" width="270" height="140" rx="20"/>
+  <rect class="fm-usdc" x="1084" y="68" width="68" height="28" rx="14"/>
+  <text class="fm-p" x="1118" y="88" text-anchor="middle">USDC</text>
+  <text class="fm-t" x="1084" y="132">Stagepay</text>
+  <text class="fm-s" x="1084" y="165">milestone escrow</text>
+
+  <rect class="fm-box" x="1410" y="50" width="170" height="140" rx="20"/>
+  <text class="fm-t" x="1495" y="112" text-anchor="middle" style="font-size:25px">Freelancer</text>
+  <text class="fm-s" x="1495" y="146" text-anchor="middle" style="font-size:18px">does the work</text>
+
+  <path class="fm-line" d="M292 92 H466"/>
+  <text class="fm-l" x="379" y="80" text-anchor="middle">fundJob</text>
+  <path class="fm-line" d="M466 150 H292"/>
+  <text class="fm-l" x="379" y="178" text-anchor="middle">pause / co-sign</text>
+  <path class="fm-line" d="M912 120 H1056"/>
+  <text class="fm-l" x="984" y="106" text-anchor="middle">client of</text>
+  <path class="fm-line" d="M1332 120 H1406"/>
+  <text class="fm-l" x="1369" y="106" text-anchor="middle">pays</text>
+
+  <!-- row 2 -->
+  <rect class="fm-box" x="30" y="350" width="260" height="140" rx="20"/>
+  <text class="fm-t" x="56" y="405">Dashboard</text>
+  <text class="fm-s" x="56" y="440">reads the chain log</text>
+  <text class="fm-s" x="56" y="467">verifies each hash</text>
+
+  <rect class="fm-box" x="470" y="330" width="440" height="180" rx="22" style="stroke:#a894ff"/>
+  <text class="fm-t" x="494" y="388">Foreman agent</text>
+  <text class="fm-s" x="494" y="424">plans, reviews, decides</text>
+  <text class="fm-s" x="494" y="451">session key holds no funds</text>
+  <text class="fm-s" x="494" y="478">every decision hashed on chain</text>
+
+  <rect class="fm-box" x="1060" y="350" width="400" height="140" rx="20"/>
+  <text class="fm-t" x="1084" y="405">Tool server</text>
+  <text class="fm-s" x="1084" y="440">github · http-check · rubric</text>
+  <text class="fm-s" x="1084" y="467">pay-per-call, priced in USDC</text>
+
+  <path class="fm-line" d="M912 420 H1056"/>
+  <text class="fm-l" x="984" y="404" text-anchor="middle">voucher</text>
+  <path class="fm-line" d="M690 326 V214"/>
+  <text class="fm-l" x="708" y="262">approve · revise · escalate</text>
+  <path class="fm-dash" d="M250 346 C 250 270, 380 240, 466 198"/>
+  <text class="fm-l" x="338" y="300">reads events</text>
+  <path class="fm-dash" d="M1495 194 C 1495 282, 1260 292, 1196 194"/>
+  <text class="fm-l" x="1346" y="286" text-anchor="middle">submits milestone</text>
+</svg>

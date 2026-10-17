@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Foreman dashboard (sample)</title>
+<!-- Stand-in for the real dashboard: content is rendered by JS after a short delay, to exercise the screenshot "delay"/"waitFor" options. -->
+<style>
+  :root { --bg:#0a0f1f; --card:#121a38; --line:rgba(160,175,255,.16); --text:#f4f6ff; --muted:#9aa7d1; --accent:#7c5cff; --usdc:#2775ca; --ok:#45e0a0; --warn:#ffb454; --bad:#ff6b81;
+          --font: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; --mono: "SF Mono", ui-monospace, Menlo, monospace; }
+  * { box-sizing: border-box; }
+  body { margin:0; background: radial-gradient(1100px 600px at 0% -10%, rgba(124,92,255,.22), transparent 60%), var(--bg); color:var(--text); font-family:var(--font); min-height:100vh; }
+  header { display:flex; align-items:center; justify-content:space-between; padding:26px 56px; border-bottom:1px solid var(--line); }
+  .brand { display:flex; align-items:center; gap:14px; font-weight:750; font-size:26px; letter-spacing:-.01em; }
+  .brand i { width:34px; height:34px; border-radius:10px; background:linear-gradient(135deg,var(--accent),var(--usdc)); display:block; }
+  .pills { display:flex; gap:12px; }
+  .pill { padding:8px 16px; border-radius:999px; border:1px solid var(--line); font-size:16px; color:var(--muted); background:rgba(124,92,255,.08); }
+  .pill.ok { color:var(--ok); } .pill.sample { color:var(--warn); border-color:rgba(255,180,84,.4); }
+  main { display:grid; grid-template-columns: 560px 1fr; gap:28px; padding:32px 56px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:20px; padding:26px 28px; }
+  h2 { margin:0 0 18px; font-size:15px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:650; }
+  .kv { display:grid; grid-template-columns: 190px 1fr; row-gap:13px; font-size:20px; }
+  .kv span:nth-child(odd) { color:var(--muted); } .mono { font-family:var(--mono); font-size:18px; }
+  .meter { height:10px; border-radius:6px; background:rgba(160,175,255,.14); overflow:hidden; margin-top:6px; }
+  .meter b { display:block; height:100%; background:linear-gradient(90deg,var(--accent),var(--usdc)); }
+  .stack { display:flex; flex-direction:column; gap:28px; }
+  .decision { padding:22px 26px; border:1px solid var(--line); border-radius:16px; background:rgba(255,255,255,.02); margin-bottom:16px; }
+  .row { display:flex; align-items:center; justify-content:space-between; gap:16px; }
+  .title { font-size:22px; font-weight:650; } .amt { font-family:var(--mono); font-size:20px; color:var(--text); }
+  .badge { padding:5px 14px; border-radius:999px; font-size:15px; font-weight:700; letter-spacing:.06em; }
+  .b-ok { background:rgba(69,224,160,.14); color:var(--ok); } .b-warn { background:rgba(255,180,84,.14); color:var(--warn); } .b-bad { background:rgba(255,107,129,.14); color:var(--bad); }
+  .why { margin:12px 0 14px; color:#cdd5f3; font-size:18px; line-height:1.45; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; } .chip { font-size:15px; padding:5px 12px; border-radius:10px; background:rgba(160,175,255,.1); color:var(--muted); }
+  .hash { margin-top:14px; font-size:16px; color:var(--ok); font-family:var(--mono); }
+  .skeleton { height:18px; border-radius:8px; background:rgba(160,175,255,.12); margin:12px 0; }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><i></i> Foreman <span style="color:var(--muted);font-weight:500">dashboard</span></div>
+  <div class="pills"><span class="pill sample">sample data</span><span class="pill ok">Arc mainnet · chain 5042</span><span class="pill">kill switch: off</span></div>
+</header>
+<main>
+  <div class="stack">
+    <section class="card" id="policy"><h2>Policy</h2><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></section>
+    <section class="card" id="spend"><h2>Tool spend</h2><div class="skeleton"></div><div class="skeleton"></div></section>
+  </div>
+  <section class="card" id="timeline"><h2>Decision timeline</h2><div class="skeleton" style="height:120px"></div><div class="skeleton" style="height:120px"></div></section>
+</main>
+<script>
+  // pretend to read the chain: content appears ~1.2 s after load
+  setTimeout(() => {
+    document.getElementById('policy').innerHTML = `<h2>Policy</h2><div class="kv">
+      <span>Owner</span><span class="mono">0x1f3c…a90e</span><span>Agent</span><span class="mono">0x8d42…07bc</span>
+      <span>Auto-approve cap</span><span>50.00 USDC</span><span>Daily cap</span><span>200.00 USDC</span>
+      <span>Spent today</span><span>40.00 USDC<div class="meter"><b style="width:20%"></b></div></span></div>`;
+    document.getElementById('spend').innerHTML = `<h2>Tool spend</h2><div class="kv">
+      <span>Channel deposit</span><span>0.50 USDC</span><span>Redeemed</span><span>0.012 USDC</span><span>Available</span><span>0.488 USDC</span></div>`;
+    const card = (t, amt, badge, cls, why, chips, hash) => `<div class="decision"><div class="row"><div class="title">${t}</div><div class="row"><span class="amt">${amt}</span><span class="badge ${cls}">${badge}</span></div></div>
+      <div class="why">${why}</div><div class="chips">${chips.map(c => `<span class="chip">${c}</span>`).join('')}</div>${hash ? `<div class="hash">&#10003; log matches on-chain hash ${hash}</div>` : ''}</div>`;
+    document.getElementById('timeline').innerHTML = `<h2>Decision timeline</h2>`
+      + card('Job #3 · Milestone 1 · Landing page', '40.00 USDC', 'APPROVED', 'b-ok', 'All four acceptance criteria met, each backed by independent evidence. Within the auto-approve cap.', ['github 0.002', 'http-check 0.001', 'rubric 0.005', '4 / 4 criteria'], '0x5be1…77a0')
+      + card('Job #3 · Milestone 2 · Checkout flow', '120.00 USDC', 'ESCALATED', 'b-warn', 'Quality looks good, but the amount is above the 50 USDC auto-approve cap. Owner co-sign required.', ['github 0.002', 'rubric 0.005', 'over cap'], '0xa1c7…3e52')
+      + card('Job #2 · Milestone 3 · Email templates', '25.00 USDC', 'REVISION', 'b-bad', 'Two of four criteria unmet: the unsubscribe link is missing and the layout breaks at 375 px.', ['http-check 0.001', 'rubric 0.005', '2 / 4 criteria'], '0x70d9…c814');
+  }, 1200);
+</script>
+</body>
+</html>

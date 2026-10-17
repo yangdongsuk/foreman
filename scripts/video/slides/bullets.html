@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{heading}}</title>
+<!-- vars: heading, bullets (list, max 5; **word** highlights), kicker?, brand?, footer? -->
+<link rel="stylesheet" href="base.css">
+<style>
+  h2.heading { margin-top: 18px; font-size: 76px; line-height: 1.06; font-weight: 780; max-height: 170px; overflow: hidden; max-width: 1500px; }
+  .list-area { flex: 1; min-height: 0; display: flex; align-items: center; padding-bottom: 30px; }
+  ul.bullets {
+    list-style: none; margin: 0; padding: 0; font-size: 50px;
+    display: flex; flex-direction: column; gap: 0.62em; max-height: 600px; overflow: hidden; max-width: 1640px;
+    padding: 24px 24px 24px 24px; margin: -24px -24px; /* room for the numeral glow inside the clip box */
+  }
+  .bullets li { display: flex; align-items: flex-start; gap: 0.62em; }
+  .bullets .n {
+    flex: none; width: 1.5em; height: 1.5em; margin-top: 0.3em; border-radius: 50%;
+    display: grid; place-items: center; font-size: 0.62em; font-weight: 750; color: #fff;
+    background: linear-gradient(135deg, var(--accent), var(--usdc));
+    box-shadow: 0 0 0 7px rgba(124, 92, 255, 0.14), 0 10px 28px rgba(39, 117, 202, 0.35);
+  }
+  .bullets .t { padding-top: 0.04em; line-height: 1.24; font-weight: 520; color: var(--text); text-wrap: pretty; }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="content">
+    <div class="kicker">{{kicker|Why it matters}}</div>
+    <h2 class="heading grad" data-fit data-fit-min="40">{{heading}}</h2>
+    <div class="list-area"><ul class="bullets" data-fit data-fit-min="26">{{#each bullets max=5}}<li><span class="n">{{@n}}</span><span class="t">{{this}}</span></li>{{/each}}</ul></div>
+  </div>
+  <div class="footer">
+    <span class="brand"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="13" fill="#7c5cff"/><path d="M24 10 L35 14 V24 C35 31 30 36 24 39 C18 36 13 31 13 24 V14 Z" fill="none" stroke="#fff" stroke-width="3.4" stroke-linejoin="round"/><path d="M19 24 l4 4 l7 -8" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>{{brand|Foreman}}</span>
+    <span>{{footer|Spending limits enforced on-chain · Built on Arc with USDC gas}}</span>
+  </div>
+</div>
+<script src="base.js"></script>
+</body>
+</html>

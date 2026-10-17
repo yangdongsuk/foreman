@@ -1,0 +1,33 @@
+[?25l[38;5;141m[1m▌[22m[39m [1mFOREMAN[22m  [2mreview · job #3 · milestone 1 of 3[22m [1m"Landing page"[22m
+[2m────────────────────────────────────────────────────────────────────────────────────────────────[22m
+  [2mplan       [22m [2m0x9c1e…b7a2[22m  [32m✓[39m matches on-chain termsHash
+  [2mpolicy     [22m auto-approve ≤ [38;2;39;117;202m50.00 USDC[39m · today 0.00 / 200.00 USDC · [32mrunning[39m
+  [2msubmitted  [22m [4;38;5;75mhttps://github.com/acme-co/landing-page/pull/14[24;39m
+  [2mamount     [22m [1m[38;2;39;117;202m40.00 USDC[39m[22m → freelancer [2m0x7Ab3…19Fe[22m
+
+  [1mstep 1/3[22m  [35mthink[39m  Need proof the PR is real and merged, then the live URL.
+            [36mtool [39m  github        [2m0.002000 USDC[22m  [2mreceipt 0x41ab…c9d0[22m
+            [2m↳ PR #14 merged · +312 −41 · 9 files · checks passing[22m
+  [1mstep 2/3[22m  [35mthink[39m  Check the deployed page against criteria 1–4.
+            [36mtool [39m  http-check    [2m0.001000 USDC[22m  [2mreceipt 0x41ab…d1e7[22m
+            [2m↳ 200 OK · 412 ms · title "Acme — Landing" · 6 sections · 14 links[22m
+  [1mstep 3/3[22m  [35mthink[39m  Judge the evidence against the written acceptance criteria.
+            [36mtool [39m  rubric        [2m0.005000 USDC[22m  [2mreceipt 0x41ab…e3f8[22m
+            [2m↳ 4/4 criteria met · confidence 0.91[22m
+
+  [1mcriteria[22m
+    [32m✓[39m Responsive layout at 375 / 768 / 1280 px       [2mviewport meta + 3 breakpoints in the diff[22m
+    [32m✓[39m Lighthouse performance ≥ 90                    [2mcheck-run "lighthouse" = 94[22m
+    [32m✓[39m Contact form posts to /api/lead                [2mdiff adds the POST handler and a test[22m
+    [32m✓[39m Deployed at the agreed URL                     [2m200 OK, title matches the brief[22m
+
+  [2mrationale  [22m All four acceptance criteria are met and each one is backed by independent evidence (diff, check-runs, live fetch). Spend on tools was 0.008 USDC, well inside the 0.05 USDC review budget. No revision needed.
+
+  [2mguardrails [22m [32m✓[39m amount 40.00 ≤ auto-approve cap 50.00
+              [32m✓[39m daily total 40.00 ≤ 200.00  [32m✓[39m not paused  [32m✓[39m review window 71h left
+
+  [2mdecision   [22m [1;30;42m APPROVE [0m  [2mtool spend 0.008000 USDC[22m
+  [2mreasonHash [22m [2m0x5be1…77a0[22m
+  [33m⠋[39m waiting for confirmation…[2K  [33m⠙[39m waiting for confirmation…[2K  [32m✓[39m confirmed   [2mblock 1,284,311 · gas 0.0021 USDC[22m
+  [2mtx         [22m [4;38;5;75mhttps://explorer.arc.io/tx/0x3f9c…a21b[24;39m
+  [32m✓[39m [1m40.00 USDC released to the freelancer[22m [?25h

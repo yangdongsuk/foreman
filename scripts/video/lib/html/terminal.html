@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<base href="{{base}}">
+<link rel="stylesheet" href="../../slides/base.css">
+<style>
+  body {
+    background:
+      radial-gradient(1200px 760px at 10% -10%, rgba(124, 92, 255, 0.30), transparent 62%),
+      radial-gradient(1000px 700px at 104% 110%, rgba(39, 117, 202, 0.28), transparent 64%),
+      linear-gradient(180deg, #0b1124 0%, #070b17 100%);
+  }
+  .win {
+    position: absolute; left: {{winX}}px; top: {{winY}}px; width: {{winW}}px; height: {{winH}}px;
+    border-radius: 16px; overflow: hidden; background: {{bg}};
+    border: 1px solid rgba(160, 175, 255, 0.24);
+    box-shadow: 0 50px 120px rgba(2, 4, 14, 0.7), 0 0 0 1px rgba(0, 0, 0, 0.45), 0 0 140px rgba(124, 92, 255, 0.14);
+  }
+  .bar {
+    position: relative; height: {{titleH}}px; display: flex; align-items: center; padding: 0 20px;
+    background: linear-gradient(#1c2445, #161d3a); border-bottom: 1px solid rgba(160, 175, 255, 0.14);
+  }
+  .dots { display: flex; gap: 9px; z-index: 1; }
+  .dot { width: 14px; height: 14px; border-radius: 50%; }
+  .red { background: #ff5f57; } .yellow { background: #febc2e; } .green { background: #28c840; }
+  .title {
+    position: absolute; left: 0; right: 0; text-align: center; font: 600 16px var(--font);
+    letter-spacing: 0.01em; color: #9aa7d1; white-space: nowrap; overflow: hidden; padding: 0 120px;
+  }
+  .body {
+    height: {{bodyH}}px; padding: {{padV}}px {{padH}}px; overflow: hidden; box-sizing: content-box;
+    font: 400 {{fs}}px/{{lh}}px Menlo, "SF Mono", ui-monospace, Monaco, "DejaVu Sans Mono", Consolas, "Courier New", monospace;
+    color: {{fg}}; white-space: pre; font-variant-ligatures: none; -webkit-font-smoothing: antialiased;
+  }
+  .row { height: {{lh}}px; overflow: hidden; }
+  .b { font-weight: 700; } .i { font-style: italic; }
+  .u { text-decoration: underline; text-underline-offset: 3px; } .s { text-decoration: line-through; }
+  .u.s { text-decoration: underline line-through; }
+  .g { display: inline-block; text-align: center; overflow: visible; white-space: pre; }
+  .cur { display: inline-block; width: 1ch; height: {{lh}}px; vertical-align: top; background: {{fg}}; opacity: 0.8; }
+</style>
+</head>
+<body>
+<div class="win">
+  <div class="bar"><div class="dots"><i class="dot red"></i><i class="dot yellow"></i><i class="dot green"></i></div><div class="title">{{{titleHtml}}}</div></div>
+  <div class="body" id="body"></div>
+</div>
+<script>
+  window.__setBody = function (html) { document.getElementById('body').innerHTML = html; };
+</script>
+</body>
+</html>

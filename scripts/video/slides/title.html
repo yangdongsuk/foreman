@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{product}}</title>
+<!-- vars: product, pitch, kicker?, chips? (list, max 4), brand?, footer? -->
+<link rel="stylesheet" href="base.css">
+<style>
+  .center { gap: 34px; max-width: 1180px; }
+  h1.product { font-size: 184px; line-height: 1.02; font-weight: 800; letter-spacing: -0.032em; max-height: 210px; overflow: hidden; padding-bottom: 0.05em; }
+  .pitch { margin: 0; font-size: 46px; line-height: 1.28; font-weight: 500; color: var(--soft); max-width: 1120px; max-height: 250px; overflow: hidden; text-wrap: balance; }
+  .chips { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 10px; }
+  .orbit { position: absolute; right: 70px; top: 96px; width: 740px; height: 740px; opacity: 0.95; }
+</style>
+</head>
+<body>
+<div class="slide">
+  <svg class="orbit" viewBox="0 0 700 700" aria-hidden="true">
+    <defs>
+      <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c5cff"/><stop offset="1" stop-color="#2775ca"/></linearGradient>
+      <radialGradient id="glow"><stop offset="0" stop-color="#7c5cff" stop-opacity=".55"/><stop offset="1" stop-color="#7c5cff" stop-opacity="0"/></radialGradient>
+      <filter id="blur"><feGaussianBlur stdDeviation="6"/></filter>
+    </defs>
+    <circle cx="350" cy="350" r="330" fill="none" stroke="rgba(160,175,255,.20)" stroke-width="1.5" stroke-dasharray="2 12" stroke-linecap="round"/>
+    <circle cx="350" cy="350" r="250" fill="none" stroke="rgba(160,175,255,.14)" stroke-width="1.5"/>
+    <circle cx="350" cy="350" r="170" fill="none" stroke="rgba(160,175,255,.24)" stroke-width="1.5" stroke-dasharray="3 9" stroke-linecap="round"/>
+    <circle cx="350" cy="350" r="190" fill="url(#glow)"/>
+    <g fill="#7c5cff"><g transform="rotate(-24 350 350)"><circle cx="680" cy="350" r="14" opacity=".25" filter="url(#blur)"/><circle cx="680" cy="350" r="8"/></g><g transform="rotate(118 350 350)"><circle cx="680" cy="350" r="7"/></g></g>
+    <g fill="#2775ca"><g transform="rotate(62 350 350)"><circle cx="600" cy="350" r="16" opacity=".3" filter="url(#blur)"/><circle cx="600" cy="350" r="9"/></g><g transform="rotate(205 350 350)"><circle cx="600" cy="350" r="7"/></g><g transform="rotate(300 350 350)"><circle cx="520" cy="350" r="8"/></g></g>
+    <g fill="#e8e3ff"><g transform="rotate(168 350 350)"><circle cx="520" cy="350" r="5"/></g><g transform="rotate(20 350 350)"><circle cx="520" cy="350" r="5"/></g></g>
+    <rect x="270" y="270" width="160" height="160" rx="42" fill="url(#g)"/>
+    <rect x="270" y="270" width="160" height="160" rx="42" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="2"/>
+    <path d="M350 305 L388 319 V349 C388 372 372 389 350 398 C328 389 312 372 312 349 V319 Z" fill="none" stroke="#fff" stroke-width="9" stroke-linejoin="round"/>
+    <path d="M333 351 l13 13 l24 -27" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+
+  <div class="content"><div class="center">
+    <div class="kicker">{{kicker|AI agent · Arc · USDC}}</div>
+    <h1 class="product grad" data-fit data-fit-min="96">{{product}}</h1>
+    <p class="pitch" data-fit data-fit-min="30">{{pitch}}</p>
+    <div class="chips">{{#each chips max=4}}<span class="pill"><i></i>{{this}}</span>{{/each}}</div>
+  </div></div>
+
+  <div class="footer">
+    <span class="brand"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="13" fill="#7c5cff"/><path d="M24 10 L35 14 V24 C35 31 30 36 24 39 C18 36 13 31 13 24 V14 Z" fill="none" stroke="#fff" stroke-width="3.4" stroke-linejoin="round"/><path d="M19 24 l4 4 l7 -8" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>{{brand|Foreman}}</span>
+    <span>{{footer|Spending limits enforced on-chain · Built on Arc with USDC gas}}</span>
+  </div>
+</div>
+<script src="base.js"></script>
+</body>
+</html>
