@@ -1,0 +1,19 @@
+{
+  "name": "foreman",
+  "version": "0.1.0",
+  "description": "An AI agent that runs freelance contracts inside spending limits a smart contract enforces, on Arc",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "foreman": "agent/foreman.mjs"
+  },
+  "scripts": {
+    "foreman": "node agent/foreman.mjs",
+    "tools": "node tools/server.mjs",
+    "test": "forge test && node --test agent/*.test.mjs",
+    "e2e": "bash scripts/local-e2e.sh"
+  },
+  "dependencies": {
+    "viem": "2.56.8"
+  }
+}

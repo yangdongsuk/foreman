@@ -1,0 +1,12 @@
+node_modules/
+out/
+cache/
+state/
+broadcast/
+.env
+*.env
+log/
+submission/
+scripts/video/out/
+scripts/video/cache/
+scripts/video/node_modules/
