@@ -73,11 +73,32 @@ The owner opens a Tollgate channel to the tool provider and names a fresh **sess
 
 | Contract | Address |
 | --- | --- |
-| ForemanPolicy (new) | [POLICY_ROW] |
+| ForemanPolicy (new) | [`0x2065a64a410E0610ebD654b4eC4ADE142e9A68E2`](https://explorer.arc.io/address/0x2065a64a410E0610ebD654b4eC4ADE142e9A68E2) ([deploy tx](https://explorer.arc.io/tx/0xc3bbbd93f49285d01922c21d59e3978f73e75a3ebdf5833eb0a8070a028c0750)) · [Sourcify](https://repo.sourcify.dev/5042/0x2065a64a410E0610ebD654b4eC4ADE142e9A68E2) · caps: 0.10 USDC per milestone, 0.15 USDC per day |
 | Stagepay (milestone escrow) | [`0x0A87039a127b600cF9B85d4C33d97c08054e15E6`](https://explorer.arc.io/address/0x0A87039a127b600cF9B85d4C33d97c08054e15E6) · [Sourcify](https://repo.sourcify.dev/5042/0x0A87039a127b600cF9B85d4C33d97c08054e15E6) |
 | Tollgate (pay-per-call channels) | [`0xEF2B3226f14Bd201bF90C3bc489ebE829b39483F`](https://explorer.arc.io/address/0xEF2B3226f14Bd201bF90C3bc489ebE829b39483F) · [Sourcify](https://repo.sourcify.dev/5042/0xEF2B3226f14Bd201bF90C3bc489ebE829b39483F) |
 
-[MAINNET_RUN]
+### The first job on mainnet
+
+A pilot job, run on 2026-10-18 (KST) with our own test freelancer account. Every step is an Arc mainnet transaction:
+
+| Step | Who | Proof |
+| --- | --- | --- |
+| Brief → plan with acceptance criteria, hashed (`termsHash 0x92e83f08…`) | agent | [plan file](plans/0x92e83f085e62697eb5839189f3a50da70c3d68be99dc6fa0903ede42846cef14.json) |
+| Tool channel opened with 0.04 USDC; an unfunded session key signs the vouchers | owner | [tx](https://explorer.arc.io/tx/0xfb41a270f73ece1411fb5265538dfa88204e5b1900b2cbc930a179162ef0eb6b) |
+| Job #2 funded through the policy: 0.05 + 0.15 USDC in escrow | owner | [tx](https://explorer.arc.io/tx/0xd7f24735ba2d3cd3b8946a1f04206045fb5dc32c4828606817476e1c266fe4cc) |
+| Milestone 1 submitted: [PR #1](https://github.com/yangdongsuk/foreman/pull/1), a Korean README that left out the limits table | freelancer | [tx](https://explorer.arc.io/tx/0x5d22b5580bc5454d8a95999bfe2b575037789a8f4157f988869701e3cbebc441) |
+| Agent paid for 2 tool calls (0.003 USDC), found the missing table and **requested a revision** with a concrete note | agent | [tx](https://explorer.arc.io/tx/0xcc1b8fd53b70fbfb5ede79378bc7a662d7e22138b0a00cef79a75729a2c74f31) |
+| Milestone 1 resubmitted with the table | freelancer | [tx](https://explorer.arc.io/tx/0x0d2de46370a8c53051b8f32e4ea5ef27d1f0e205b3ff180a215970b4174696a0) |
+| Agent compared both files in full (3 tool calls, 0.004 USDC) and **approved**: 0.05 USDC paid | agent | [tx](https://explorer.arc.io/tx/0x68f3a00f44fbbe143160ea4f8bb39883737b9f36983d87e4da8bff80fc590043) |
+| Milestone 2 submitted: the [Korean landing page](https://yangdongsuk.github.io/foreman/ko.html) | freelancer | [tx](https://explorer.arc.io/tx/0xc67f3bd315ef7de3458a8727bea4cee0b8c6a978196bb45da02059eeff910a52) |
+| Agent **escalated**: 0.15 USDC is above the 0.10 cap, and it said it could not verify the link targets | agent | [tx](https://explorer.arc.io/tx/0x8bc7b7ae67d3a88829135eb2fc35d91b5e2f13a0cff011cc21d544290eec9ba0) |
+| Owner checked the flagged links and **co-signed**: 0.15 USDC paid | owner | [tx](https://explorer.arc.io/tx/0x0ccefae5e7fb85d5bdaf58ab0da77ae27e4ff583c24d1e2ef69c757a73233c8e) |
+| Kill switch on; an agent call reverts with `IsPaused`; kill switch off | owner | [pause](https://explorer.arc.io/tx/0xe33eb5dfe24f7a6085dc4e35fcfda5e3dce9c0dca60ec1896809e819e5f10151) · [resume](https://explorer.arc.io/tx/0x1c4dd464d906950b9320ae68bfde31b699f4f77daf68f4593bc1dc545b2682ef) |
+| Tool provider redeemed 0.012 USDC of vouchers in 3 transactions | provider | [1](https://explorer.arc.io/tx/0x68d6beecde5856388705465ff5cf76510fdfdda35612e2eed17f05cfba975ad6) · [2](https://explorer.arc.io/tx/0x3b7e07d82914490ab3330a8b5cb23643c9b320e797f0013a76aad71544622364) · [3](https://explorer.arc.io/tx/0x2e2cdda8daf962632f9e45b6c3fffbb578ae09402b6f8a120a799c3df1e53853) |
+
+The decision records behind the three agent transactions are in [`web/data/decisions.json`](web/data/decisions.json) (the dashboard re-checks their hashes), and the terminal output of every step is in [`demo/transcripts/`](demo/transcripts/).
+
+**What the run taught us** (fixed the same night): the first review could see only 3,000 characters of the file, so raw text deliverables are now returned whole; the landing-page review could not see link targets, so `http-check` now returns every link with its resolved URL; and the repository README lookup no longer mis-parses GitHub's raw media type.
 
 ## Run it
 
@@ -92,7 +113,18 @@ bash scripts/local-e2e.sh       # the whole workflow on a local anvil node with 
 On Arc mainnet (keys come from the environment; see `SPEC.md` for the roles):
 
 ```bash
-[MAINNET_COMMANDS]
+cd foreman && npm install
+forge create contracts/src/ForemanPolicy.sol:ForemanPolicy --rpc-url https://rpc.mainnet.arc.io \
+  --private-key $OWNER_KEY --broadcast --gas-price 40gwei --priority-gas-price 1gwei \
+  --constructor-args 0x0A87039a127b600cF9B85d4C33d97c08054e15E6 $AGENT_ADDRESS 100000 150000
+export FOREMAN_POLICY=0x... POLICY_DEPLOY_BLOCK=...
+DEPOSIT_USDC=0.04 node scripts/open-channel.mjs          # prints TOLLGATE_CHANNEL=0x...
+node tools/server.mjs &                                   # pay-per-call tools on :8790
+node agent/foreman.mjs plan --brief "..." --budget 0.2 --yes
+node agent/foreman.mjs fund --plan <termsHash> --freelancer <address>
+node agent/foreman.mjs watch --job <id>                   # reviews submissions as they arrive
+node agent/foreman.mjs cosign --job <id> --index <i>      # owner, for escalations
+node agent/foreman.mjs pause                              # owner kill switch (resume to undo)
 ```
 
 ## Repository
@@ -108,7 +140,7 @@ On Arc mainnet (keys come from the environment; see `SPEC.md` for the roles):
 ## Status and honesty notes
 
 - Built during the Tameion Agents Hackathon (see the commit history). Stagepay and Tollgate were written and deployed in the week before the event and were not changed during it.
-- [TRACTION_NOTE]
+- Traction so far is a pilot: one job with two milestones, three agent decisions and one owner co-sign, 0.20 USDC escrowed and paid out, and 0.012 USDC of tool calls paid by voucher, all with our own owner and freelancer accounts. There are no outside customers yet.
 - Known limits: one owner per policy; the model runs through the owner's own Anthropic key or Claude Code login; the tool server is a single process; reasoning text is public by design.
 
 MIT license.

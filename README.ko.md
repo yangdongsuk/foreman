@@ -73,11 +73,32 @@ Foreman은 예산을 프롬프트에서 꺼내 스마트 컨트랙트로 옮깁�
 
 | 컨트랙트 | 주소 |
 | --- | --- |
-| ForemanPolicy (신규) | [POLICY_ROW] |
+| ForemanPolicy (신규) | [`0x2065a64a410E0610ebD654b4eC4ADE142e9A68E2`](https://explorer.arc.io/address/0x2065a64a410E0610ebD654b4eC4ADE142e9A68E2) ([배포 tx](https://explorer.arc.io/tx/0xc3bbbd93f49285d01922c21d59e3978f73e75a3ebdf5833eb0a8070a028c0750)) · [Sourcify](https://repo.sourcify.dev/5042/0x2065a64a410E0610ebD654b4eC4ADE142e9A68E2) · 한도: 마일스톤당 0.10 USDC, 하루 0.15 USDC |
 | Stagepay (마일스톤 에스크로) | [`0x0A87039a127b600cF9B85d4C33d97c08054e15E6`](https://explorer.arc.io/address/0x0A87039a127b600cF9B85d4C33d97c08054e15E6) · [Sourcify](https://repo.sourcify.dev/5042/0x0A87039a127b600cF9B85d4C33d97c08054e15E6) |
 | Tollgate (호출당 결제 채널) | [`0xEF2B3226f14Bd201bF90C3bc489ebE829b39483F`](https://explorer.arc.io/address/0xEF2B3226f14Bd201bF90C3bc489ebE829b39483F) · [Sourcify](https://repo.sourcify.dev/5042/0xEF2B3226f14Bd201bF90C3bc489ebE829b39483F) |
 
-[MAINNET_RUN]
+### 메인넷에서 실행한 첫 작업
+
+2026-10-18(KST)에 우리 쪽 테스트 프리랜서 계정으로 진행한 시범 작업입니다. 모든 단계가 Arc 메인넷 트랜잭션입니다.
+
+| 단계 | 주체 | 증거 |
+| --- | --- | --- |
+| 브리프 → 승인 기준이 포함된 계획, 해시 고정(`termsHash 0x92e83f08…`) | 에이전트 | [계획 파일](plans/0x92e83f085e62697eb5839189f3a50da70c3d68be99dc6fa0903ede42846cef14.json) |
+| 도구 채널 개설(0.04 USDC). 바우처 서명은 자금이 없는 세션 키가 담당 | 오너 | [tx](https://explorer.arc.io/tx/0xfb41a270f73ece1411fb5265538dfa88204e5b1900b2cbc930a179162ef0eb6b) |
+| 정책 컨트랙트를 통해 작업 #2 예치: 0.05 + 0.15 USDC | 오너 | [tx](https://explorer.arc.io/tx/0xd7f24735ba2d3cd3b8946a1f04206045fb5dc32c4828606817476e1c266fe4cc) |
+| 마일스톤 1 제출: [PR #1](https://github.com/yangdongsuk/foreman/pull/1), 한도 표가 빠진 한국어 README | 프리랜서 | [tx](https://explorer.arc.io/tx/0x5d22b5580bc5454d8a95999bfe2b575037789a8f4157f988869701e3cbebc441) |
+| 에이전트가 도구 2회(0.003 USDC)를 결제해 누락된 표를 찾아내고 구체적인 메모와 함께 **수정 요청** | 에이전트 | [tx](https://explorer.arc.io/tx/0xcc1b8fd53b70fbfb5ede79378bc7a662d7e22138b0a00cef79a75729a2c74f31) |
+| 표를 추가해 마일스톤 1 재제출 | 프리랜서 | [tx](https://explorer.arc.io/tx/0x0d2de46370a8c53051b8f32e4ea5ef27d1f0e205b3ff180a215970b4174696a0) |
+| 에이전트가 두 파일을 끝까지 비교(도구 3회, 0.004 USDC)하고 **승인**: 0.05 USDC 지급 | 에이전트 | [tx](https://explorer.arc.io/tx/0x68f3a00f44fbbe143160ea4f8bb39883737b9f36983d87e4da8bff80fc590043) |
+| 마일스톤 2 제출: [한국어 랜딩 페이지](https://yangdongsuk.github.io/foreman/ko.html) | 프리랜서 | [tx](https://explorer.arc.io/tx/0xc67f3bd315ef7de3458a8727bea4cee0b8c6a978196bb45da02059eeff910a52) |
+| 에이전트가 **에스컬레이션**: 0.15 USDC가 한도 0.10을 넘고, 링크 대상을 확인하지 못했다고 명시 | 에이전트 | [tx](https://explorer.arc.io/tx/0x8bc7b7ae67d3a88829135eb2fc35d91b5e2f13a0cff011cc21d544290eec9ba0) |
+| 오너가 지적된 링크를 확인하고 **공동 서명**: 0.15 USDC 지급 | 오너 | [tx](https://explorer.arc.io/tx/0x0ccefae5e7fb85d5bdaf58ab0da77ae27e4ff583c24d1e2ef69c757a73233c8e) |
+| 킬 스위치 켜기 → 에이전트 호출이 `IsPaused`로 거부됨 → 킬 스위치 끄기 | 오너 | [정지](https://explorer.arc.io/tx/0xe33eb5dfe24f7a6085dc4e35fcfda5e3dce9c0dca60ec1896809e819e5f10151) · [재개](https://explorer.arc.io/tx/0x1c4dd464d906950b9320ae68bfde31b699f4f77daf68f4593bc1dc545b2682ef) |
+| 도구 제공자가 바우처 0.012 USDC를 트랜잭션 3건으로 정산 | 제공자 | [1](https://explorer.arc.io/tx/0x68d6beecde5856388705465ff5cf76510fdfdda35612e2eed17f05cfba975ad6) · [2](https://explorer.arc.io/tx/0x3b7e07d82914490ab3330a8b5cb23643c9b320e797f0013a76aad71544622364) · [3](https://explorer.arc.io/tx/0x2e2cdda8daf962632f9e45b6c3fffbb578ae09402b6f8a120a799c3df1e53853) |
+
+에이전트 트랜잭션 3건의 결정 기록은 [`web/data/decisions.json`](web/data/decisions.json)에 있고(대시보드가 해시를 다시 검증합니다), 각 단계의 터미널 출력은 [`demo/transcripts/`](demo/transcripts/)에 있습니다.
+
+**이번 실행에서 배운 점**(같은 날 밤 수정): 첫 검수에서는 파일의 앞 3,000자만 보였기 때문에 이제 원문 텍스트 납품물은 전체를 돌려줍니다. 랜딩 페이지 검수에서는 링크 대상을 볼 수 없었기 때문에 `http-check`가 이제 모든 링크와 해석된 URL을 돌려줍니다. 저장소 README 조회가 GitHub의 raw 미디어 타입을 잘못 파싱하던 문제도 고쳤습니다.
 
 ## 실행하기
 
@@ -92,7 +113,18 @@ bash scripts/local-e2e.sh       # the whole workflow on a local anvil node with 
 Arc 메인넷에서는 다음과 같이 실행합니다(키는 환경 변수에서 읽으며, 각 역할은 `SPEC.md`를 참고하세요):
 
 ```bash
-[MAINNET_COMMANDS]
+cd foreman && npm install
+forge create contracts/src/ForemanPolicy.sol:ForemanPolicy --rpc-url https://rpc.mainnet.arc.io \
+  --private-key $OWNER_KEY --broadcast --gas-price 40gwei --priority-gas-price 1gwei \
+  --constructor-args 0x0A87039a127b600cF9B85d4C33d97c08054e15E6 $AGENT_ADDRESS 100000 150000
+export FOREMAN_POLICY=0x... POLICY_DEPLOY_BLOCK=...
+DEPOSIT_USDC=0.04 node scripts/open-channel.mjs          # TOLLGATE_CHANNEL=0x... 출력
+node tools/server.mjs &                                   # :8790에서 호출당 결제 도구 실행
+node agent/foreman.mjs plan --brief "..." --budget 0.2 --yes
+node agent/foreman.mjs fund --plan <termsHash> --freelancer <address>
+node agent/foreman.mjs watch --job <id>                   # 제출이 들어오는 대로 검수
+node agent/foreman.mjs cosign --job <id> --index <i>      # 오너, 에스컬레이션 건 처리
+node agent/foreman.mjs pause                              # 오너 킬 스위치 (resume으로 해제)
 ```
 
 ## 저장소 구조
@@ -108,7 +140,7 @@ Arc 메인넷에서는 다음과 같이 실행합니다(키는 환경 변수에�
 ## 현황과 솔직한 참고 사항
 
 - Tameion Agents Hackathon 기간에 만들었습니다(커밋 기록 참고). Stagepay와 Tollgate는 해커톤 직전 한 주 동안 작성해 배포했으며, 해커톤 기간에는 변경하지 않았습니다.
-- [TRACTION_NOTE]
+- 지금까지의 트랙션은 시범 운영 수준입니다. 마일스톤 2개짜리 작업 1건, 에이전트 결정 3건과 오너 공동 서명 1건, 예치 후 지급된 0.20 USDC, 바우처로 결제된 도구 호출 0.012 USDC이며, 모두 우리 쪽 오너·프리랜서 계정으로 진행했습니다. 아직 외부 고객은 없습니다.
 - 알려진 한계: 정책당 오너는 한 명입니다. 모델은 오너 본인의 Anthropic 키 또는 Claude Code 로그인으로 실행됩니다. 도구 서버는 단일 프로세스입니다. 판단 근거 텍스트는 설계상 공개됩니다.
 
 MIT 라이선스.
