@@ -2,316 +2,313 @@
   {
     "record": {
       "version": 1,
-      "jobId": "1",
-      "index": 2,
-      "amountUnits": "350000000",
-      "verdict": "escalate",
-      "rationale": "The final milestone looks complete (analytics, SEO checks and handover docs all verified) but it pays 350 USDC, above the 200 USDC auto-approve cap. The contract would reject an agent approval, so I am escalating with a full evidence summary for the owner to co-sign.",
-      "criteria": [
-        {
-          "criterion": "Analytics and conversion tracking installed",
-          "met": true,
-          "evidence": "GitHub diff adds gtag snippet and 3 conversion events"
-        },
-        {
-          "criterion": "Lighthouse SEO score at least 90",
-          "met": true,
-          "evidence": "CI check-run \"lighthouse\" reports SEO 96, performance 91"
-        },
-        {
-          "criterion": "Handover documentation delivered",
-          "met": true,
-          "evidence": "README and docs/HANDOVER.md present (2.1k words); rubric judge confidence 0.93"
-        }
-      ],
-      "feedbackToFreelancer": "",
-      "guardrails": [
-        "approve downgraded to escalate: amount 350 USDC > autoApproveCap 200 USDC"
-      ],
-      "steps": [
-        {
-          "thought": "Start with the PR and its check-runs.",
-          "tool": "github",
-          "args": {
-            "url": "https://github.com/maya-lindqvist/harbor-roasters/pull/9"
-          },
-          "receipt": {
-            "channelId": "0x7c1e5f3a9d2b4860c1a7e3f95b2d8a40c6e1f7b39d5a28c4e0b6f1a73d9c5e82",
-            "cumulative": "21000",
-            "price": "2000"
-          },
-          "resultDigest": "PR #9 merged, +1.2k/-90, lighthouse SEO 96"
-        },
-        {
-          "thought": "Documentation quality is subjective; one judge call.",
-          "tool": "rubric",
-          "args": {
-            "criteria": [
-              "Handover documentation delivered"
-            ]
-          },
-          "receipt": {
-            "channelId": "0x7c1e5f3a9d2b4860c1a7e3f95b2d8a40c6e1f7b39d5a28c4e0b6f1a73d9c5e82",
-            "cumulative": "26000",
-            "price": "5000"
-          },
-          "resultDigest": "met=true confidence=0.93 (LLM judge)"
-        }
-      ],
-      "toolSpendUnits": "7000",
-      "model": "claude-sonnet-5-5",
-      "planHash": "0x3f8a1c5d7e92b04a6cd1f358e07b9a24d6c1e8f35a70b9d24c6e1f8a3b5d7092",
-      "submissionNote": "Final delivery: analytics + SEO pass + handover docs. PR https://github.com/maya-lindqvist/harbor-roasters/pull/9",
-      "decidedAt": "2026-10-18T11:20:05.000Z"
-    },
-    "reasonHash": "0x93156cbb43d37669883ea983dd448c09afc7dbaea6633953e493700e15e78ac2",
-    "tx": "0x7a3e1c9b5d2f84a6e0c3b7d9f1a5c8e2b4d6f0a3c5e7b9d1f3a5c7e9b1d3f5a7",
-    "explorer": null,
-    "sample": true
-  },
-  {
-    "record": {
-      "version": 1,
-      "jobId": "1",
+      "jobId": 2,
       "index": 1,
-      "amountUnits": "180000000",
-      "verdict": "approve",
-      "rationale": "Online ordering form submits to the staging endpoint, validates required fields and the order-summary email template renders. Evidence from the repo README and PR checks (CI green) covers all three criteria. 180 USDC is under the 200 USDC auto-approve cap.",
+      "milestoneName": "Korean landing page",
+      "amountUnits": "150000",
+      "verdict": "escalate",
+      "modelVerdict": "escalate",
+      "rationale": "The page is live and in Korean, and it has a Korean step-by-step section. However, this milestone (0.15 USDC) is above the 0.1 USDC auto-approve cap and today's remaining allowance, so I cannot approve it. Separately, I could not verify the link targets (dashboard URL, README.ko.md) or that the limit values match the README.md limits table. The page text shows limits as descriptions with no numeric values. A human should decide on payment and check these items.",
       "criteria": [
         {
-          "criterion": "Order form validates name, phone and pickup time",
+          "criterion": "Fetching https://yangdongsuk.github.io/foreman/ko.html returns HTTP 200 and the visible page text is primarily Korean (Hangul).",
           "met": true,
-          "evidence": "GitHub diff: form.js validators + 7 unit tests, CI check-runs all success"
+          "evidence": "http-check returned status 200 and the title, h1 and text sample are primarily Hangul."
         },
         {
-          "criterion": "Orders are delivered to the owner by email",
+          "criterion": "The page has a section, with a Korean heading, that explains how Foreman works in steps, covering at least: the brief or plan, USDC escrow of milestones, submission of a deliverable, automated review, and payment on approval.",
           "met": true,
-          "evidence": "README documents SMTP config; template file present; rubric judge confidence 0.88"
+          "evidence": "The section '어떻게 동작하나요' lists brief→plan, USDC escrow, deliverable submission, automated review and payment on approval."
         },
         {
-          "criterion": "Deployed and documented",
-          "met": true,
-          "evidence": "http-check: /order returns 200; README has setup section"
+          "criterion": "The page lists the limits the contract enforces, with the same values as the limits table in README.md, expressed in Korean.",
+          "met": false,
+          "evidence": "A limits section exists, but the sample shows no numeric values, and README.md's limits table was not fetched to compare."
+        },
+        {
+          "criterion": "The page contains a hyperlink to the Foreman dashboard, using the same dashboard URL given in README.md.",
+          "met": false,
+          "evidence": "A '대시보드 보기' link text is present, but the href was not returned and README.md's dashboard URL was not checked."
+        },
+        {
+          "criterion": "The page contains a hyperlink to the Korean README, pointing to README.ko.md in the yangdongsuk/foreman repository on GitHub.",
+          "met": false,
+          "evidence": "A '한국어 README' link text is present, but the href target was not shown, so it is unverified."
         }
       ],
       "feedbackToFreelancer": "",
       "guardrails": [],
       "steps": [
         {
-          "thought": "The deliverable is code; read the PR first.",
-          "tool": "github",
-          "args": {
-            "url": "https://github.com/maya-lindqvist/harbor-roasters/pull/6"
-          },
-          "receipt": {
-            "channelId": "0x7c1e5f3a9d2b4860c1a7e3f95b2d8a40c6e1f7b39d5a28c4e0b6f1a73d9c5e82",
-            "cumulative": "13000",
-            "price": "2000"
-          },
-          "resultDigest": "PR #6 merged, +540/-12, CI success (3/3)"
-        },
-        {
-          "thought": "Confirm it is deployed.",
+          "step": 1,
+          "thought": "Fetch the live page and the repo (for README limits table and dashboard URL) in parallel.",
           "tool": "http-check",
           "args": {
-            "url": "https://harbor-roasters.example/order"
+            "url": "https://yangdongsuk.github.io/foreman/ko.html"
           },
           "receipt": {
-            "channelId": "0x7c1e5f3a9d2b4860c1a7e3f95b2d8a40c6e1f7b39d5a28c4e0b6f1a73d9c5e82",
-            "cumulative": "14000",
+            "channelId": "0x4a812a137c3fc2ba927bafd8df8edc0b155d13966939cfdb594306a994952289",
+            "cumulative": "8000",
             "price": "1000"
           },
-          "resultDigest": "status 200, form present, 9 inputs"
+          "resultDigest": "HTTP 200 \"Foreman — 한국어\" · 9719 bytes · 238 ms",
+          "resultHash": "0x08f053c23e00f7a0bbbdd263d9712ee36193562f8fac83431cac03723410104a"
         },
         {
-          "thought": "Email delivery cannot be observed directly; ask the judge to weigh the README and template evidence.",
-          "tool": "rubric",
-          "args": {
-            "criteria": [
-              "Orders are delivered to the owner by email"
-            ]
-          },
-          "receipt": {
-            "channelId": "0x7c1e5f3a9d2b4860c1a7e3f95b2d8a40c6e1f7b39d5a28c4e0b6f1a73d9c5e82",
-            "cumulative": "19000",
-            "price": "5000"
-          },
-          "resultDigest": "met=true confidence=0.88 (LLM judge)"
-        }
-      ],
-      "toolSpendUnits": "8000",
-      "model": "claude-sonnet-5-5",
-      "planHash": "0x3f8a1c5d7e92b04a6cd1f358e07b9a24d6c1e8f35a70b9d24c6e1f8a3b5d7092",
-      "submissionNote": "Order form done, PR https://github.com/maya-lindqvist/harbor-roasters/pull/6 and live at https://harbor-roasters.example/order",
-      "decidedAt": "2026-10-18T10:03:27.000Z"
-    },
-    "reasonHash": "0xfbf508788a1e3c6d3cdaca764edf94c998f624f19a0a72f2f82ed558bba7eea1",
-    "tx": "0xc0d4f6a83b1e9572d4a6c8e0f2b5d7a913e5c7b9d1f3a5c7e9b1d3f5a7c9e1b3",
-    "explorer": null,
-    "sample": true
-  },
-  {
-    "record": {
-      "version": 1,
-      "jobId": "1",
-      "index": 0,
-      "amountUnits": "120000000",
-      "verdict": "approve",
-      "rationale": "Resubmission fixes both gaps: the mobile menu toggle exists and works (diff adds menu.js and aria attributes) and the meta description is now 148 characters. All four criteria are met and the amount is within the auto-approve cap and today's remaining budget, so the contract will release it.",
-      "criteria": [
-        {
-          "criterion": "Landing page is publicly reachable over HTTPS",
-          "met": true,
-          "evidence": "http-check: 200 OK in 388 ms"
-        },
-        {
-          "criterion": "Hero, menu, pricing and contact sections are present",
-          "met": true,
-          "evidence": "Unchanged from first review"
-        },
-        {
-          "criterion": "Navigation works on mobile viewports",
-          "met": true,
-          "evidence": "GitHub diff: menu.js toggles .open, nav.css shows button under 640px; rubric judge confidence 0.91"
-        },
-        {
-          "criterion": "Page has a title and meta description",
-          "met": true,
-          "evidence": "http-check: metaDescription 148 chars"
-        }
-      ],
-      "feedbackToFreelancer": "",
-      "guardrails": [],
-      "steps": [
-        {
-          "thought": "Re-verify the two failing criteria first.",
-          "tool": "http-check",
-          "args": {
-            "url": "https://harbor-roasters.example/"
-          },
-          "receipt": {
-            "channelId": "0x7c1e5f3a9d2b4860c1a7e3f95b2d8a40c6e1f7b39d5a28c4e0b6f1a73d9c5e82",
-            "cumulative": "4000",
-            "price": "1000"
-          },
-          "resultDigest": "status 200, metaDescription 148 chars"
-        },
-        {
-          "thought": "Check the fix is real code, not just a hidden element.",
+          "step": 2,
+          "thought": "Need hrefs and README values to verify criteria 3-5. Inspect the commit diff.",
           "tool": "github",
           "args": {
-            "url": "https://github.com/maya-lindqvist/harbor-roasters/pull/4"
+            "url": "https://github.com/yangdongsuk/foreman/commit/91504e714fe174256fb245ef966bd76cd568fce6"
           },
           "receipt": {
-            "channelId": "0x7c1e5f3a9d2b4860c1a7e3f95b2d8a40c6e1f7b39d5a28c4e0b6f1a73d9c5e82",
-            "cumulative": "6000",
+            "channelId": "0x4a812a137c3fc2ba927bafd8df8edc0b155d13966939cfdb594306a994952289",
+            "cumulative": "10000",
             "price": "2000"
           },
-          "resultDigest": "PR #4 merged, +86/-4: menu.js, nav.css, index.html meta"
+          "resultDigest": "commit 91504e7 \"Add the Korean landing page web/ko.html (job #2 milestone 2 ...[truncated 12 chars]\" · 1 files",
+          "resultHash": "0x63b651d130398292c2473f72d7ca61d7e620bfc226c5a6a47ee9823d70adb63f"
         },
         {
-          "thought": "The diff is plausible but the mobile criterion decided the last round; one rubric judgement on it is worth 0.005 USDC.",
-          "tool": "rubric",
-          "args": {
-            "criteria": [
-              "Navigation works on mobile viewports"
-            ]
-          },
-          "receipt": {
-            "channelId": "0x7c1e5f3a9d2b4860c1a7e3f95b2d8a40c6e1f7b39d5a28c4e0b6f1a73d9c5e82",
-            "cumulative": "11000",
-            "price": "5000"
-          },
-          "resultDigest": "met=true confidence=0.91 (LLM judge)"
-        }
-      ],
-      "toolSpendUnits": "8000",
-      "model": "claude-sonnet-5-5",
-      "planHash": "0x3f8a1c5d7e92b04a6cd1f358e07b9a24d6c1e8f35a70b9d24c6e1f8a3b5d7092",
-      "submissionNote": "Fixed both: mobile menu + meta description. PR https://github.com/maya-lindqvist/harbor-roasters/pull/4",
-      "decidedAt": "2026-10-18T08:55:40.000Z"
-    },
-    "reasonHash": "0x3b588d61f5bf2d4e99388d5721a7b6194699148a36cfd01937fa5b3ba2dcc8c1",
-    "tx": "0x5be27d1f09a4c83e6d5f12b7a90c4e8d3f61a2b5c7d9e0f48a1b3c6d2e5f7a90",
-    "explorer": null,
-    "sample": true
-  },
-  {
-    "record": {
-      "version": 1,
-      "jobId": "1",
-      "index": 0,
-      "amountUnits": "120000000",
-      "verdict": "request_revision",
-      "rationale": "The page is live and the hero, pricing and contact sections match the brief, but the mobile navigation is broken (no menu control below 640px) and the page has no meta description. Two of four acceptance criteria are unmet, so the contract cannot release the milestone yet.",
-      "criteria": [
-        {
-          "criterion": "Landing page is publicly reachable over HTTPS",
-          "met": true,
-          "evidence": "http-check: 200 OK in 412 ms, final URL https://harbor-roasters.example/"
-        },
-        {
-          "criterion": "Hero, menu, pricing and contact sections are present",
-          "met": true,
-          "evidence": "Page text contains all four sections; 14 links found"
-        },
-        {
-          "criterion": "Navigation works on mobile viewports",
-          "met": false,
-          "evidence": "GitHub diff: nav styles hide links under 640px, no toggle button or script was added"
-        },
-        {
-          "criterion": "Page has a title and meta description",
-          "met": false,
-          "evidence": "http-check: title present, metaDescription empty"
-        }
-      ],
-      "feedbackToFreelancer": "Thanks, the layout looks great. Two fixes before approval: (1) add a working mobile menu toggle (links are hidden under 640px with no way to open them), (2) add a meta description of 120-160 characters. Resubmit when done.",
-      "guardrails": [],
-      "steps": [
-        {
-          "thought": "Start with a free-of-judgement fact check: is the deliverable reachable and what does it contain?",
-          "tool": "http-check",
-          "args": {
-            "url": "https://harbor-roasters.example/"
-          },
-          "receipt": {
-            "channelId": "0x7c1e5f3a9d2b4860c1a7e3f95b2d8a40c6e1f7b39d5a28c4e0b6f1a73d9c5e82",
-            "cumulative": "1000",
-            "price": "1000"
-          },
-          "resultDigest": "status 200, title \"Harbor Roasters\", 14 links, metaDescription empty"
-        },
-        {
-          "thought": "Mobile navigation is a criterion; the diff is the cheapest way to verify it without a browser.",
+          "step": 3,
+          "thought": "Need README.md limits table and dashboard URL to compare against the page; the page text shows no numeric values. Fetch the repository for a README excerpt.",
           "tool": "github",
           "args": {
-            "url": "https://github.com/maya-lindqvist/harbor-roasters/pull/3"
+            "url": "https://github.com/yangdongsuk/foreman"
           },
           "receipt": {
-            "channelId": "0x7c1e5f3a9d2b4860c1a7e3f95b2d8a40c6e1f7b39d5a28c4e0b6f1a73d9c5e82",
-            "cumulative": "3000",
+            "channelId": "0x4a812a137c3fc2ba927bafd8df8edc0b155d13966939cfdb594306a994952289",
+            "cumulative": "12000",
             "price": "2000"
           },
-          "resultDigest": "PR #3 merged, 9 files, +412/-38; nav.css hides .menu below 640px"
+          "resultDigest": "repo yangdongsuk/foreman · 0 stars · README empty · last push 2026-10-17",
+          "resultHash": "0x244e52ce4f5307cc2cbcaadff7c90661be1e04376e62fd5ca3a1f09d6f4aba1b"
         },
         {
-          "thought": "Two criteria are clearly unmet. A paid rubric call would not change the verdict, so I will decide now and save budget.",
+          "step": 4,
+          "thought": "Milestone 0.15 exceeds the 0.1 auto-approve cap and the remaining allowance, so approval is impossible. Link hrefs and README values were not verified. Escalate.",
           "tool": null,
           "args": null,
           "receipt": null,
-          "resultDigest": "enough evidence"
+          "resultDigest": null
+        }
+      ],
+      "toolSpendUnits": "5000",
+      "model": "claude-cli:sonnet",
+      "planHash": "0x92e83f085e62697eb5839189f3a50da70c3d68be99dc6fa0903ede42846cef14",
+      "submissionNote": "Korean landing page is live: https://yangdongsuk.github.io/foreman/ko.html (source: https://github.com/yangdongsuk/foreman/commit/91504e714fe174256fb245ef966bd76cd568fce6)",
+      "submittedAt": 1792251962,
+      "revisionsUsed": 0,
+      "decidedAt": "2026-10-17T15:46:45.749Z"
+    },
+    "reasonHash": "0x24a5e16b9c2b51c5fdbdaaae0c2d98a97efa7a146c8d2a22e58dd5ad1507b961",
+    "tx": "0x8bc7b7ae67d3a88829135eb2fc35d91b5e2f13a0cff011cc21d544290eec9ba0",
+    "explorer": "https://explorer.arc.io/tx/0x8bc7b7ae67d3a88829135eb2fc35d91b5e2f13a0cff011cc21d544290eec9ba0",
+    "chainId": 5042,
+    "policy": "0x2065a64a410E0610ebD654b4eC4ADE142e9A68E2",
+    "loggedAt": "2026-10-17T15:46:46.875Z"
+  },
+  {
+    "record": {
+      "version": 1,
+      "jobId": 2,
+      "index": 0,
+      "milestoneName": "Korean README",
+      "amountUnits": "50000",
+      "verdict": "approve",
+      "modelVerdict": "approve",
+      "rationale": "PR #1 targets yangdongsuk/foreman (base main) and changes only README.ko.md. The raw file has all 11 headings of README.md in the same order, the 8-row limits table with the same values, Korean prose, and matching code blocks and links. The 0.05 USDC amount is within the 0.1 cap and the 0.15 allowance.",
+      "criteria": [
+        {
+          "criterion": "The pull request targets the yangdongsuk/foreman repository and adds a file named README.ko.md at the repository root.",
+          "met": true,
+          "evidence": "PR #1 is on yangdongsuk/foreman with base main, and its only changed file is README.ko.md with status added."
+        },
+        {
+          "criterion": "README.ko.md contains a Korean heading or section corresponding to every heading in the current README.md, in the same order, with none omitted.",
+          "met": true,
+          "evidence": "All 11 headings (Foreman, problem, How it works, agent loop, verifiable log, Tollgate, Circle stack, Deployment, Run it, Repository, Status) appear in Korean in the same order."
+        },
+        {
+          "criterion": "The limits table from README.md is present in README.ko.md as a Markdown table with the same rows and numeric values as the original, with labels and descriptions translated into Korean.",
+          "met": true,
+          "evidence": "The Korean table has the same 8 rows as the original, with the same numeric value (max 3 revision requests), and translated labels and descriptions."
+        },
+        {
+          "criterion": "The prose of README.ko.md is written in Korean (Hangul) rather than left in English, apart from code blocks, commands, URLs, and product or technical names such as Foreman and USDC.",
+          "met": true,
+          "evidence": "All prose, list items and table text are in Hangul. English remains only in code blocks, identifiers and product names."
+        },
+        {
+          "criterion": "Code blocks, commands and links in README.ko.md match those in README.md, and the pull request changes no file other than README.ko.md, apart from an optional link to it in README.md.",
+          "met": true,
+          "evidence": "The diagram and bash blocks, the placeholders and all URLs match the original. The only link difference is the in-page anchor, which is localized to #배포-arc-메인넷. The PR changes one file."
+        }
+      ],
+      "feedbackToFreelancer": "",
+      "guardrails": [],
+      "steps": [
+        {
+          "step": 1,
+          "thought": "Need evidence: inspect the PR for changed files and diff.",
+          "tool": "github",
+          "args": {
+            "url": "https://github.com/yangdongsuk/foreman/pull/1"
+          },
+          "receipt": {
+            "channelId": "0x4a812a137c3fc2ba927bafd8df8edc0b155d13966939cfdb594306a994952289",
+            "cumulative": "5000",
+            "price": "2000"
+          },
+          "resultDigest": "PR \"Add Korean README (README.ko.md)\" open · +114/-0 in 1 files · CI success",
+          "resultHash": "0xef8bbe0e407c4e7964964d16217a6814e0d0dfc5608066a656c31481488417b4"
+        },
+        {
+          "step": 2,
+          "thought": "The diff excerpt is truncated and I lack the original README.md to compare headings, table rows and code blocks. Fetch the original raw README.md.",
+          "tool": "http-check",
+          "args": {
+            "url": "https://raw.githubusercontent.com/yangdongsuk/foreman/main/README.md"
+          },
+          "receipt": {
+            "channelId": "0x4a812a137c3fc2ba927bafd8df8edc0b155d13966939cfdb594306a994952289",
+            "cumulative": "6000",
+            "price": "1000"
+          },
+          "resultDigest": "HTTP 200 · 9038 bytes · 48 ms",
+          "resultHash": "0xe6ae81546641d2dddd581844ea8706daba1caa5dedc2c360539817ade89a454e"
+        },
+        {
+          "step": 3,
+          "thought": "The PR diff excerpt is cut off before the end of README.ko.md, so I can't see the last headings (Run it, Repository, Status and honesty notes) or the later code blocks. I'll fetch the raw Korean file to check them.",
+          "tool": "http-check",
+          "args": {
+            "url": "https://raw.githubusercontent.com/yangdongsuk/foreman/ko-readme/README.ko.md"
+          },
+          "receipt": {
+            "channelId": "0x4a812a137c3fc2ba927bafd8df8edc0b155d13966939cfdb594306a994952289",
+            "cumulative": "7000",
+            "price": "1000"
+          },
+          "resultDigest": "HTTP 200 · 11703 bytes · 279 ms",
+          "resultHash": "0xc064457d2598984ea043480713d32847d0c7050f7aca5113312a92c1737751ed"
+        },
+        {
+          "step": 4,
+          "thought": "Evidence from the GitHub PR and raw files covers all criteria. Approval is within the cap and allowance.",
+          "tool": null,
+          "args": null,
+          "receipt": null,
+          "resultDigest": null
+        }
+      ],
+      "toolSpendUnits": "4000",
+      "model": "claude-cli:sonnet",
+      "planHash": "0x92e83f085e62697eb5839189f3a50da70c3d68be99dc6fa0903ede42846cef14",
+      "submissionNote": "Revision done: the limits table is now in README.ko.md. Same PR: https://github.com/yangdongsuk/foreman/pull/1 (raw file: https://raw.githubusercontent.com/yangdongsuk/foreman/ko-readme/README.ko.md)",
+      "submittedAt": 1792251785,
+      "revisionsUsed": 1,
+      "decidedAt": "2026-10-17T15:43:53.723Z"
+    },
+    "reasonHash": "0xc733826e38076b6308431cbe817ed1c8fd5360ee328187b4ed0679b15185fe51",
+    "tx": "0x68f3a00f44fbbe143160ea4f8bb39883737b9f36983d87e4da8bff80fc590043",
+    "explorer": "https://explorer.arc.io/tx/0x68f3a00f44fbbe143160ea4f8bb39883737b9f36983d87e4da8bff80fc590043",
+    "chainId": 5042,
+    "policy": "0x2065a64a410E0610ebD654b4eC4ADE142e9A68E2",
+    "loggedAt": "2026-10-17T15:43:54.847Z"
+  },
+  {
+    "record": {
+      "version": 1,
+      "jobId": 2,
+      "index": 0,
+      "milestoneName": "Korean README",
+      "amountUnits": "50000",
+      "verdict": "request_revision",
+      "modelVerdict": "request_revision",
+      "rationale": "The PR adds only README.ko.md, but the limits table from README.md's 'The problem' section is missing. In the diff, the line ending 'Foreman은 예산을 프롬프트에서 꺼내 스마트 컨트랙트로 옮깁니다:' is followed directly by the next paragraph. The original has an 8-row table there. Because a criterion is unmet, the milestone cannot be approved. The fix is small, so a revision is better than escalation.",
+      "criteria": [
+        {
+          "criterion": "The pull request targets the yangdongsuk/foreman repository and adds a file named README.ko.md at the repository root.",
+          "met": true,
+          "evidence": "PR #1 on yangdongsuk/foreman (base main) adds README.ko.md with status 'added' and no directory prefix."
+        },
+        {
+          "criterion": "README.ko.md contains a Korean heading or section corresponding to every heading in the current README.md, in the same order, with none omitted.",
+          "met": false,
+          "evidence": "The visible headings (문제, 동작 방식, 에이전트 루프) follow the original order. The diff excerpt is truncated, so the remaining headings, including Deployment, could not be verified."
+        },
+        {
+          "criterion": "The limits table from README.md is present in README.ko.md as a Markdown table with the same rows and numeric values as the original, with labels and descriptions translated into Korean.",
+          "met": false,
+          "evidence": "No Markdown table appears after the colon sentence in '해결하려는 문제'. The original has an 8-row table (Limit / Enforced by / What it stops) there."
+        },
+        {
+          "criterion": "The prose of README.ko.md is written in Korean (Hangul) rather than left in English, apart from code blocks, commands, URLs, and product or technical names such as Foreman and USDC.",
+          "met": true,
+          "evidence": "All visible prose is in Korean, with English limited to code, identifiers and product names. The truncated tail was not seen."
+        },
+        {
+          "criterion": "Code blocks, commands and links in README.ko.md match those in README.md, and the pull request changes no file other than README.ko.md, apart from an optional link to it in README.md.",
+          "met": false,
+          "evidence": "The PR changes only README.ko.md (1 file), and the visible diagram and links look the same as the original. The truncated remainder could not be compared, so full parity is unverified."
+        }
+      ],
+      "feedbackToFreelancer": "The limits table is missing. In '해결하려는 문제', after '...스마트 컨트랙트로 옮깁니다:', add the 8-row Markdown table from README.md. Keep the same rows, numeric values (3 revisions) and identifiers like `ForemanPolicy`/`OverDailyCap`. Translate the 'Limit' and 'What it stops' columns into Korean. Also check that every README.md heading, in order, and every code block and link appears in README.ko.md.",
+      "guardrails": [],
+      "steps": [
+        {
+          "step": 1,
+          "thought": "Start by inspecting the pull request to verify files changed and diff.",
+          "tool": "github",
+          "args": {
+            "url": "https://github.com/yangdongsuk/foreman/pull/1"
+          },
+          "receipt": {
+            "channelId": "0x4a812a137c3fc2ba927bafd8df8edc0b155d13966939cfdb594306a994952289",
+            "cumulative": "2000",
+            "price": "2000"
+          },
+          "resultDigest": "PR \"Add Korean README (README.ko.md)\" open · +103/-0 in 1 files · CI success",
+          "resultHash": "0xfe7dc358e9a90c1c6b91a738da2d982242939e8a3f36bc6623b6878a6ee17706"
+        },
+        {
+          "step": 2,
+          "thought": "The diff excerpt is truncated and shows no limits table after \"Foreman은 예산을 ... 옮깁니다:\". I need the original README.md to compare headings, table, and code blocks.",
+          "tool": "http-check",
+          "args": {
+            "url": "https://raw.githubusercontent.com/yangdongsuk/foreman/main/README.md"
+          },
+          "receipt": {
+            "channelId": "0x4a812a137c3fc2ba927bafd8df8edc0b155d13966939cfdb594306a994952289",
+            "cumulative": "3000",
+            "price": "1000"
+          },
+          "resultDigest": "HTTP 200 · 9038 bytes · 267 ms",
+          "resultHash": "0xeb7cd345f08fe79c04a804dfbb97bd2700ed4105eb09de908e920e3198567058"
+        },
+        {
+          "step": 3,
+          "thought": "The PR diff shows the limits table missing: the Korean text goes from the colon sentence straight to the following paragraph. Criterion 3 fails, so a revision request is warranted without more paid calls.",
+          "tool": null,
+          "args": null,
+          "receipt": null,
+          "resultDigest": null
         }
       ],
       "toolSpendUnits": "3000",
-      "model": "claude-sonnet-5-5",
-      "planHash": "0x3f8a1c5d7e92b04a6cd1f358e07b9a24d6c1e8f35a70b9d24c6e1f8a3b5d7092",
-      "submissionNote": "Landing page deployed: https://harbor-roasters.example/ - PR https://github.com/maya-lindqvist/harbor-roasters/pull/3",
-      "decidedAt": "2026-10-18T07:42:11.000Z"
+      "model": "claude-cli:sonnet",
+      "planHash": "0x92e83f085e62697eb5839189f3a50da70c3d68be99dc6fa0903ede42846cef14",
+      "submissionNote": "Korean README ready for review: https://github.com/yangdongsuk/foreman/pull/1",
+      "submittedAt": 1792251661,
+      "revisionsUsed": 0,
+      "decidedAt": "2026-10-17T15:41:40.346Z"
     },
-    "reasonHash": "0xe38935cc10a214c132bc65b023cf682e50ec7cf398c670df8f5f57749fca3dd7",
-    "tx": "0x91c4a0d83e5b7f2a6c19d4e8b03a5f7c2e61d9b48a3f05c7e2d1b6a94f8c3e07",
-    "explorer": null,
-    "sample": true
+    "reasonHash": "0x5dc513b601855dda4a9c32d797c4f5939d0063fc4c250a565f2247caec786726",
+    "tx": "0xcc1b8fd53b70fbfb5ede79378bc7a662d7e22138b0a00cef79a75729a2c74f31",
+    "explorer": "https://explorer.arc.io/tx/0xcc1b8fd53b70fbfb5ede79378bc7a662d7e22138b0a00cef79a75729a2c74f31",
+    "chainId": 5042,
+    "policy": "0x2065a64a410E0610ebD654b4eC4ADE142e9A68E2",
+    "loggedAt": "2026-10-17T15:41:44.738Z"
   }
 ]
