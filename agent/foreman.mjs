@@ -8,6 +8,7 @@ import { reviewMilestone, readDecisions, hasDecision } from './review.mjs';
 import { ToolClient } from './tools-client.mjs';
 import { modelName } from './llm.mjs';
 import { canonicalHash } from './canonical.mjs';
+import { cmdAttest } from './attest.mjs';
 import * as ui from './ui.mjs';
 import { c } from './ui.mjs';
 
@@ -23,6 +24,7 @@ ${c.bold('foreman')} - an AI agent that runs freelance contracts inside limits a
   limits                                                print the on-chain policy
   submit  --job <id> --index <i> --note "<text>"        demo helper: freelancer submits (FREELANCER key)
   status  --job <id>                                    milestones, decisions, tool spend
+  attest  --job <id> --index <i>                        run the Chainlink CRE review workflow, attest on Arc Testnet
 `;
 
 function parseArgs(argv) {
@@ -310,6 +312,7 @@ async function main() {
     case 'limits': return cmdLimits();
     case 'submit': return cmdSubmit(flags);
     case 'status': return cmdStatus(flags);
+    case 'attest': return cmdAttest(flags, { int, need });
     case undefined: case 'help': case '--help': console.log(HELP); return;
     default: throw new Error(`unknown command "${cmd}" (try: foreman help)`);
   }

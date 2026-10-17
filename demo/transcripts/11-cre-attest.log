@@ -1,0 +1,26 @@
+
+[1m[36m FOREMAN [0m[0m [90m|[0m [1mattest[0m[90m  job #2 · milestone 1 · Chainlink CRE workflow[0m
+[90m────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+  [90mmilestone     [0mKorean README  (0.05 USDC, Released, 1 revision used)
+  [90mdeliverable   [0m[34mhttps://github.com/yangdongsuk/foreman/pull/1[0m
+  [90mcriteria      [0m5 from the signed-off plan
+  [90mreceiver      [0m0xD069469B0828bACB492a18614f93159D255b0E6d on Arc Testnet
+
+  [90m…[0m running the CRE workflow: evidence, judgment, signed report
+
+[1mWorkflow[0m
+  [90mworkflow      [0mjob 2 milestone 0, 5 criteria, deliverable https://github.com/yangdongsuk/foreman/p…
+  [90mevidence      [0myangdongsuk/foreman#1 "Add Korean README (README.ko.md)" state=closed merged=true f…
+    [90m1.[0m [32mmet   [0m [90m[gemini][0m The pull request targets yangdongsuk/foreman and adds README.ko.md at…
+    [90m2.[0m [32mmet   [0m [90m[gemini][0m Every heading from README.md has a corresponding translated Korean he…
+    [90m3.[0m [32mmet   [0m [90m[gemini][0m The Markdown table is present with identical rows, values, and code r…
+    [90m4.[0m [32mmet   [0m [90m[gemini][0m The prose throughout README.ko.md is properly translated into Korean …
+    [90m5.[0m [32mmet   [0m [90m[gemini][0m All code blocks, commands, and URLs match the original README.md, and…
+
+[1mResult[0m
+  [90mverdict       [0m[1;30;42m APPROVE [0m [90mvia gemini[0m
+  [90mreasonHash    [0m0x55d00e8dc3aab7a5bf21b2d06a5931afec23482a9d3f850d135eab324d877ff4
+  [90mevidenceHash  [0m0x87f0321eeff8a867ead7687c98de28f7f5070e8bb6939afedd34d0a43dc1c811
+  [90mtx            [0m[34mhttps://testnet.arcscan.app/tx/0x6b799f0e1ec4288b207c69323c309971c5e76bf3252573e2ef33a0b59844b3c3[0m
+  [32m✓[0m [1mReviewAttested[0m on Arc Testnet: reasonHash on chain equals the workflow's, block 67701986
+  [90mlogged        [0mlog/cre-attestations.jsonl

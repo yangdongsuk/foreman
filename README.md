@@ -69,6 +69,37 @@ The owner opens a Tollgate channel to the tool provider and names a fresh **sess
 - **Sub-second finality.** "Approved" means paid, not "wait for confirmations".
 - **Circle's ERC-20 interface for USDC** (`0x3600…0000`, 6 decimals) is used for all accounting; the 18-decimal native balance is only gas.
 
+## Chainlink CRE: the review as a verifiable workflow
+
+The review step also exists as a [Chainlink CRE](https://docs.chain.link/cre) workflow (`cre/foreman-review`, TypeScript). It is the orchestration layer around the review: it takes a submitted milestone, collects evidence, asks a model to judge each acceptance criterion, applies Foreman's guardrails, and writes the result to Arc.
+
+1. **Trigger.** An HTTP trigger receives `{ jobId, index, deliverableUrl, criteria, amountUnits, revisionsUsed }`. `foreman attest` builds it from the signed-off plan and the on-chain milestone.
+2. **Evidence.** The workflow reads the GitHub pull request (state, files changed, the base README) and the nodes reach consensus on it.
+3. **Judgment.** One Gemini call (secret `GEMINI_API_KEY`) marks each criterion met or unmet with a reason. Deterministic checks run alongside and override the model when they prove a criterion false. If the key is missing or the call fails, the workflow falls back to the deterministic checks alone, leaves what needs a reader as unverified, escalates, and records that in the decision. It never crashes and never approves on a guess.
+4. **Guardrails.** Any unmet criterion gives a revision request, spent revisions or an unverified criterion give an escalation, and only all-met gives an approval.
+5. **Report.** The decision record is canonicalised and hashed (the same rule as `agent/canonical.mjs`, checked byte for byte in a test). The workflow asks the DON for a signed report of `(jobId, index, verdict, reasonHash, evidenceHash)` and writes it through Chainlink's forwarder to `ForemanReviewReceiver`, which only accepts calls from the forwarder and emits `ReviewAttested`.
+
+**Why CRE.** Today one agent process makes the call and we ask you to trust the log. In CRE every node fetches the evidence and runs the judgment itself, the results must reach consensus, and the DON signs the report that lands on chain. The `reasonHash` that anyone can recompute from the published record is then attested by a network rather than by our server alone.
+
+**What is real, and what is not.** This is a CRE *simulation with a real broadcast*: `cre workflow simulate --broadcast` runs the workflow locally and sends the report as a real transaction through Chainlink's `MockKeystoneForwarder` on Arc Testnet (chain 5042002). It is not a deployed workflow running on a DON: deploy access is not enabled on our CRE account yet, and the mock forwarder does not check DON signatures. The mainnet escrow flow (Stagepay, `ForemanPolicy`, the review loop above) is unchanged and does not depend on CRE.
+
+| | |
+| --- | --- |
+| Receiver (Arc Testnet) | [`0xD069469B0828bACB492a18614f93159D255b0E6d`](https://testnet.arcscan.app/address/0xD069469B0828bACB492a18614f93159D255b0E6d), verified on [Sourcify](https://repo.sourcify.dev/5042002/0xD069469B0828bACB492a18614f93159D255b0E6d) |
+| Forwarder | MockKeystoneForwarder `0x6E9EE680ef59ef64Aa8C7371279c27E496b5eDc1` |
+| Broadcast tx (job 2, milestone 1, approve via Gemini) | [`0x6b799f0e1ec4288b207c69323c309971c5e76bf3252573e2ef33a0b59844b3c3`](https://testnet.arcscan.app/tx/0x6b799f0e1ec4288b207c69323c309971c5e76bf3252573e2ef33a0b59844b3c3) |
+| Earlier broadcast (Gemini timed out, deterministic fallback, escalate) | [`0x5975f0c752587a533f3559b3920e7f3e71e1a19268efdc99d214f66ace45ff8a`](https://testnet.arcscan.app/tx/0x5975f0c752587a533f3559b3920e7f3e71e1a19268efdc99d214f66ace45ff8a) |
+
+The receiver keeps the latest attestation per milestone and counts every report (three so far, from three runs), so the last transaction is the stored one and the earlier events stay in the chain's logs. The receiver does not yet check the workflow id or owner in the report metadata; that is a step for a production deployment. The pilot job itself was settled on mainnet earlier, so the attestation is a second, independent opinion on the same pull request, not a payment trigger.
+
+Run it (needs the [CRE CLI](https://docs.chain.link/cre/getting-started/cli-installation), Bun, a funded Arc Testnet key in `cre/.env`; details in [`cre/README.md`](cre/README.md)):
+
+```bash
+node agent/foreman.mjs attest --job 2 --index 0     # builds the payload, simulates with --broadcast, prints the tx
+```
+
+A recorded run is in [`demo/transcripts/11-cre-attest.log`](demo/transcripts/11-cre-attest.log), and each run is appended to `log/cre-attestations.jsonl`.
+
 ## Deployment (Arc mainnet)
 
 | Contract | Address |
@@ -133,6 +164,7 @@ node agent/foreman.mjs pause                              # owner kill switch (r
 | --- | --- |
 | `contracts/src/ForemanPolicy.sol` | The agent's on-chain mandate (caps, co-sign, kill switch). Tests in `contracts/test/` |
 | `agent/` | The Foreman agent and CLI: planning, the review loop, guardrails, decision records |
+| `cre/foreman-review/` | The Chainlink CRE review workflow (TypeScript) and its sample payloads. `contracts/src/cre/` holds `ForemanReviewReceiver`; `agent/attest.mjs` drives it |
 | `tools/` | Pay-per-call tool server guarded by Tollgate (`http-check`, `github`, `rubric`) |
 | `web/` | Static dashboard that reads Arc and verifies the decision log |
 | `vendor/tollgate.mjs`, `contracts/src/vendor/` | Tollgate SDK and the two contracts Foreman builds on, unchanged |
@@ -141,6 +173,7 @@ node agent/foreman.mjs pause                              # owner kill switch (r
 
 - Built during the Tameion Agents Hackathon (see the commit history). Stagepay and Tollgate were written and deployed in the week before the event and were not changed during it.
 - Traction so far is a pilot: one job with two milestones, three agent decisions and one owner co-sign, 0.20 USDC escrowed and paid out, and 0.012 USDC of tool calls paid by voucher, all with our own owner and freelancer accounts. There are no outside customers yet.
+- The Chainlink CRE integration is a simulation with a real broadcast through the mock forwarder on Arc Testnet; CRE deploy access is not enabled yet, so it has not run on a DON. Mainnet escrow does not use it.
 - Known limits: one owner per policy; the model runs through the owner's own Anthropic key or Claude Code login; the tool server is a single process; reasoning text is public by design.
 
 MIT license.
