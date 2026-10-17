@@ -163,7 +163,8 @@ async function blockTime(n) {
 // ---------------------------------------------------------------- data loading
 async function loadDecisionFile() {
   try {
-    const res = await fetch(DECISIONS_URL, { cache: 'no-store' });
+    // The query string also bypasses the GitHub Pages CDN, which caches files for up to 10 minutes.
+    const res = await fetch(`${DECISIONS_URL}?v=${Date.now()}`, { cache: 'no-store' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const body = await res.json();
     const list = Array.isArray(body) ? body : body.decisions ?? [];
