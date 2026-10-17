@@ -1,0 +1,75 @@
+{
+  "title": "Foreman x Chainlink CRE",
+  "voice": "en-US-AndrewNeural",
+  "rate": "+6%",
+  "crossfade": 0.3,
+  "captions": true,
+  "segments": [
+    {
+      "type": "slide",
+      "html": "slides/title.html",
+      "vars": {
+        "product": "Foreman × CRE",
+        "pitch": "The milestone review, run as a Chainlink CRE workflow and attested on chain.",
+        "kicker": "BLI Legal Tech Hackathon 2 · Chainlink CRE bounty",
+        "chips": ["GitHub evidence with consensus", "Gemini judgment, code guardrails", "DON-signed report to Arc"]
+      },
+      "narration": "Foreman is an AI agent that manages freelance milestones. Here, its review step runs as a Chainlink Runtime Environment workflow, so the verdict and its reasoning hash are attested on chain."
+    },
+    {
+      "type": "slide",
+      "html": "slides/diagram.html",
+      "vars": {
+        "heading": "One workflow orchestrates **GitHub, an LLM and Arc.**",
+        "subheading": "The agent triggers it over HTTP; the DON reaches consensus on the evidence and the judgment.",
+        "diagram": { "$file": "../../demo/cre-workflow.svg" }
+      },
+      "narration": "The agent triggers the workflow over HTTP. Step one pulls evidence from the GitHub API, with consensus across nodes. Step two asks Gemini to judge each acceptance criterion, and code checks can overrule it. Step three applies guardrails, and step four hashes the decision record and writes a signed report to a receiver contract on Arc."
+    },
+    {
+      "type": "terminal",
+      "log": "../../demo/video-logs/cre-sim.log",
+      "title": "cre workflow simulate foreman-review --broadcast",
+      "command": "cre workflow simulate foreman-review --http-payload ./payloads/pilot-pr1.json --broadcast",
+      "reveal": "lines",
+      "narration": "Here is the CRE CLI simulating it against our real pilot pull request. All five criteria are met, the verdict is approve, and the report is broadcast to Arc Testnet."
+    },
+    {
+      "type": "terminal",
+      "log": "../../demo/transcripts/11-cre-attest.log",
+      "title": "foreman attest --job 2 --index 0",
+      "command": "foreman attest --job 2 --index 0",
+      "reveal": "lines",
+      "narration": "And this is the agent consuming the workflow: foreman attest builds the payload from the signed-off plan and the on-chain milestone, runs the workflow, and checks that the reason hash on chain matches."
+    },
+    {
+      "type": "slide",
+      "html": "slides/bullets.html",
+      "vars": {
+        "kicker": "What is verified",
+        "heading": "Evidence, judgment and hash: **attested by a workflow.**",
+        "bullets": [
+          "Receiver **0xD069…0E6d** on Arc Testnet, verified on Sourcify",
+          "If Gemini fails or times out, the workflow **escalates** instead of guessing",
+          "Simulated with a **real broadcast**; mainnet escrow flow unchanged"
+        ]
+      },
+      "narration": "The receiver is verified on Sourcify. When Gemini fails or times out, the workflow falls back to code checks and escalates instead of guessing. This is a simulation with a real broadcast, and Foreman's mainnet escrow flow is unchanged."
+    },
+    {
+      "type": "slide",
+      "html": "slides/closing.html",
+      "vars": {
+        "heading": "Reviews you can **verify.**",
+        "subheading": "Code, workflow and transactions are public.",
+        "links": [
+          { "label": "Code", "url": "github.com/yangdongsuk/foreman" },
+          { "label": "Workflow", "url": "foreman/cre/foreman-review" },
+          { "label": "Receiver", "url": "0xD069…0E6d · Arc Testnet" }
+        ],
+        "cta": "Built with Chainlink CRE"
+      },
+      "narration": "The code, the workflow and every transaction are public."
+    }
+  ]
+}

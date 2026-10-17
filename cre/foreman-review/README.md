@@ -19,14 +19,14 @@ The escrow cap is enforced elsewhere (ForemanPolicy on Arc mainnet); this workfl
 From `cre/` (the project root), under a pseudo-TTY:
 
 ```bash
-cp .env.example .env            # set CRE_ETH_PRIVATE_KEY (testnet only) and optionally GEMINI_API_KEY
+cp .env.example .env            # set CRE_ETH_PRIVATE_KEY (testnet only) and optionally CRE_GEMINI_API_KEY
 script -q /dev/null cre workflow simulate foreman-review --non-interactive --trigger-index 0 \
   --http-payload ./foreman-review/payloads/pilot-pr1.json --target staging-settings < /dev/null
 # add --broadcast to send the report transaction through the MockKeystoneForwarder
 ```
 
 `receiverAddress` in `config.staging.json` is the deployed `ForemanReviewReceiver` on Arc Testnet. See `../README.md` for setup.
-The simulator requires the env var named in `secrets.yaml` to exist; an empty `GEMINI_API_KEY=` is fine and
+The simulator requires the env var named in `secrets.yaml` to exist; an empty `CRE_GEMINI_API_KEY=` is fine and
 makes the workflow use deterministic checks and say so in the record (`method`, `note`).
 
 Payloads: `pilot-pr1.json` (the real pilot, job 2 milestone 1), `negative-wrong-file.json` (expects a revision).

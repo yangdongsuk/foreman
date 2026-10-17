@@ -26,7 +26,7 @@ cp .env.example .env
 Edit `cre/.env` (git-ignored, never commit it):
 
 - `CRE_ETH_PRIVATE_KEY`: a **testnet-only** key holding a little Arc Testnet USDC (gas is paid in native USDC). Never use a mainnet key.
-- `GEMINI_API_KEY`: optional. Leave it empty (the line must exist) to force the deterministic fallback.
+- `CRE_GEMINI_API_KEY` (env var for the secret id `GEMINI_API_KEY`): optional. Leave it empty (the line must exist) to force the deterministic fallback.
 
 ## Simulate
 

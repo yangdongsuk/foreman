@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 760" font-family="Inter, -apple-system, Segoe UI, sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c7cdea"/></marker>
+    <style>
+      .b{fill:#121a33;stroke:#3b4a7a;stroke-width:2}
+      .k{fill:#0f2140;stroke:#2775CA;stroke-width:3}
+      .p{fill:#1b1640;stroke:#7C5CFF;stroke-width:3}
+      .t{fill:#f4f6ff;font-size:28px;font-weight:700}
+      .s{fill:#aab3d6;font-size:20px}
+      .n{fill:#7C5CFF;font-size:22px;font-weight:700}
+      .l{fill:#c7cdea;font-size:19px}
+      .ln{stroke:#c7cdea;stroke-width:2.2;fill:none}
+    </style>
+  </defs>
+  <rect class="b" x="30" y="300" width="260" height="150" rx="18"/>
+  <text class="t" x="55" y="350">Foreman agent</text>
+  <text class="s" x="55" y="384">foreman attest</text>
+  <text class="s" x="55" y="410">HTTP trigger: job, criteria,</text>
+  <text class="s" x="55" y="434">deliverable URL</text>
+  <rect class="p" x="360" y="60" width="760" height="640" rx="24"/>
+  <text class="t" x="390" y="110">CRE workflow  foreman-review</text>
+  <text class="s" x="390" y="140">runs on a DON: every step reaches consensus</text>
+  <rect class="b" x="390" y="170" width="700" height="100" rx="14"/>
+  <text class="n" x="410" y="210">1</text><text class="t" x="440" y="210">Evidence</text>
+  <text class="s" x="440" y="245">GitHub REST API: PR, changed files, base README · identical consensus</text>
+  <rect class="b" x="390" y="290" width="700" height="100" rx="14"/>
+  <text class="n" x="410" y="330">2</text><text class="t" x="440" y="330">Judgment</text>
+  <text class="s" x="440" y="365">Gemini judges each criterion · code checks as fallback</text>
+  <rect class="b" x="390" y="410" width="700" height="100" rx="14"/>
+  <text class="n" x="410" y="450">3</text><text class="t" x="440" y="450">Guardrails in code</text>
+  <text class="s" x="440" y="485">unmet → revision · unverified → escalate · all met → approve</text>
+  <rect class="b" x="390" y="530" width="700" height="140" rx="14"/>
+  <text class="n" x="410" y="570">4</text><text class="t" x="440" y="570">Record + signed report</text>
+  <text class="s" x="440" y="605">canonical JSON → keccak256 reasonHash, evidenceHash</text>
+  <text class="s" x="440" y="633">runtime.report() → evmClient.writeReport()</text>
+  <rect class="k" x="1190" y="270" width="380" height="210" rx="20"/>
+  <text class="t" x="1215" y="320">Arc Testnet</text>
+  <text class="s" x="1215" y="354">KeystoneForwarder →</text>
+  <text class="s" x="1215" y="382">ForemanReviewReceiver</text>
+  <text class="s" x="1215" y="410">onReport() emits</text>
+  <text class="l" x="1215" y="440">ReviewAttested(verdict, reasonHash)</text>
+  <path class="ln" d="M292 375 L355 375" marker-end="url(#a)"/>
+  <path class="ln" d="M1092 600 C1150 600, 1150 420, 1186 400" marker-end="url(#a)"/>
+</svg>
