@@ -1,0 +1,24 @@
+
+[1m[36m FOREMAN [0m[0m [90m|[0m [1mpause[0m
+[90m────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+  [1;97;41m PAUSED [0m the contract now rejects every agent action
+  [90mtx            [0m[34mhttps://explorer.arc.io/tx/0xe33eb5dfe24f7a6085dc4e35fcfda5e3dce9c0dca60ec1896809e819e5f10151[0m
+
+[1m[36m FOREMAN [0m[0m [90m|[0m [1mlimits[0m[90m  enforced by ForemanPolicy, not by the prompt[0m
+[90m────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+  [90mcontract      [0m0x2065a64a410E0610ebD654b4eC4ADE142e9A68E2
+  [90mowner         [0m0x69A8f844C7b403de20c6C8e635AE1a2627D79ED8
+  [90magent         [0m0x0C948D0078D663E69e83fb1d3CF6FC259221a1c5
+  [90mauto-approve  [0m[1m0.1 USDC[0m per milestone
+  [90mdaily cap     [0m[1m0.15 USDC[0m   spent today 0.05 USDC   left 0.1 USDC
+  [90mstate         [0m[1;97;41m PAUSED [0m
+  [90mtool channel  [0mdeposit 0.04 USDC   redeemed 0.008 USDC   signed 0.012 USDC   available 0.028 USDC
+
+[1m$ agent tries agentApprove while paused (eth_call simulation)[0m
+  ✗ reverted: server returned an error response: error code 3: execution reverted, data: "0x1309a563"
+  (selector 0x1309a563 = IsPaused())
+
+[1m[36m FOREMAN [0m[0m [90m|[0m [1mresume[0m
+[90m────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+  [1;30;42m RESUMED [0m the agent may act again, inside its limits
+  [90mtx            [0m[34mhttps://explorer.arc.io/tx/0x1c4dd464d906950b9320ae68bfde31b699f4f77daf68f4593bc1dc545b2682ef[0m

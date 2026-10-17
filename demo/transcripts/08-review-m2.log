@@ -1,0 +1,75 @@
+
+[1m[36m FOREMAN [0m[0m [90m|[0m [1mreview  job #2 · milestone 2/2[0m[90m  Korean landing page[0m
+[90m────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+  [90mamount        [0m[1m0.15 USDC[0m  [90m(auto-approve cap 0.1 USDC, left today 0.1 USDC)[0m
+  [90mplan hash     [0m0x92e83f08…6cef14 [32m✓ plan file matches the on-chain terms[0m
+  [90mrevisions     [0m0 of 3 used   [90mreview window: 48 h left[0m
+  [90msubmission    [0m[36mKorean landing page is live: https://yangdongsuk.github.io/foreman/ko.html (sourc…[0m
+
+[1mAcceptance criteria[0m
+    1. Fetching https://yangdongsuk.github.io/foreman/ko.html returns HTTP 200 and the visible page
+    text is primarily Korean (Hangul).
+    2. The page has a section, with a Korean heading, that explains how Foreman works in steps,
+    covering at least: the brief or plan, USDC escrow of milestones, submission of a deliverable,
+    automated review, and payment on approval.
+    3. The page lists the limits the contract enforces, with the same values as the limits table in
+    README.md, expressed in Korean.
+    4. The page contains a hyperlink to the Foreman dashboard, using the same dashboard URL given in
+    README.md.
+    5. The page contains a hyperlink to the Korean README, pointing to README.ko.md in the
+    yangdongsuk/foreman repository on GitHub.
+
+[1mTools (pay-per-call, Tollgate vouchers from the session key)[0m
+  [90mtool      [0m  [90m     price[0m
+  [1mhttp-check[0m  0.001 USDC
+  [1mgithub[0m      0.002 USDC
+  [1mrubric[0m      0.005 USDC
+  [90mreview budget   [0m0.02 USDC
+
+[1mReview loop[0m
+  [90m…[0m step 1: thinking
+  [35m◆[0m [2mstep 1[0m  Fetch the live page and the repo (for README limits table and dashboard URL) in paral…
+    [36m→[0m [1mhttp-check[0m [90m{"url":"https://yangdongsuk.github.io/foreman/ko.html"}[0m  [90mpay 0.001 USDC[0m
+  [90m…[0m calling http-check
+    [32m✓[0m HTTP 200 "Foreman — 한국어" · 9719 bytes · 238 ms  [90m340 ms · spent 0.001 USDC[0m
+  [90m…[0m step 2: thinking
+  [35m◆[0m [2mstep 2[0m  Need hrefs and README values to verify criteria 3-5. Inspect the commit diff.
+    [36m→[0m [1mgithub[0m [90m{"url":"https://github.com/yangdongsuk/foreman/commit/91504…[0m  [90mpay 0.002 USDC[0m
+  [90m…[0m calling github
+    [32m✓[0m commit 91504e7 "Add the Korean landing page web/ko.html (job #2…  [90m822 ms · spent 0.003 USDC[0m
+  [90m…[0m step 3: thinking
+  [35m◆[0m [2mstep 3[0m  Need README.md limits table and dashboard URL to compare against the page; the page t…
+    [36m→[0m [1mgithub[0m [90m{"url":"https://github.com/yangdongsuk/foreman"}[0m  [90mpay 0.002 USDC[0m
+  [90m…[0m calling github
+    [32m✓[0m repo yangdongsuk/foreman · 0 stars · README empty · last push 2…  [90m725 ms · spent 0.005 USDC[0m
+  [90m…[0m step 4: thinking
+  [35m◆[0m [2mstep 4[0m  Milestone 0.15 exceeds the 0.1 auto-approve cap and the remaining allowance, so appro…
+
+[1mDecision[0m
+  [1;97;41m ESCALATE [0m  [1m0.15 USDC[0m
+    The page is live and in Korean, and it has a Korean step-by-step section. However, this
+    milestone (0.15 USDC) is above the 0.1 USDC auto-approve cap and today's remaining allowance, so
+    I cannot approve it. Separately, I could not verify the link targets (dashboard URL,
+    README.ko.md) or that the limit values match the README.md limits table. The page text shows
+    limits as descriptions with no numeric values. A human should decide on payment and check these
+    items.
+
+  [32m✓[0m Fetching https://yangdongsuk.github.io/foreman/ko.html returns HTTP 200 and the visible page …
+[90m      http-check returned status 200 and the title, h1 and text sample are primarily Hangul.[0m
+  [32m✓[0m The page has a section, with a Korean heading, that explains how Foreman works in steps, cove…
+[90m      The section '어떻게 동작하나요' lists brief→plan, USDC escrow, deliverable submission, automated
+      review and payment on approval.[0m
+  [31m✗[0m The page lists the limits the contract enforces, with the same values as the limits table in …
+[90m      A limits section exists, but the sample shows no numeric values, and README.md's limits table
+      was not fetched to compare.[0m
+  [31m✗[0m The page contains a hyperlink to the Foreman dashboard, using the same dashboard URL given in…
+[90m      A '대시보드 보기' link text is present, but the href was not returned and README.md's dashboard URL
+      was not checked.[0m
+  [31m✗[0m The page contains a hyperlink to the Korean README, pointing to README.ko.md in the yangdongs…
+[90m      A '한국어 README' link text is present, but the href target was not shown, so it is unverified.[0m
+
+  [90mtool spend    [0m0.005 USDC
+  [90mreason hash   [0m[1m0x24a5e16b9c2b51c5fdbdaaae0c2d98a97efa7a146c8d2a22e58dd5ad1507b961[0m
+  [90mon chain      [0m[32m✓[0m escalate sent by the agent key
+  [90mtx            [0m[34mhttps://explorer.arc.io/tx/0x8bc7b7ae67d3a88829135eb2fc35d91b5e2f13a0cff011cc21d544290eec9ba0[0m
+

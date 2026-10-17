@@ -1,0 +1,12 @@
+
+[1m[36m FOREMAN [0m[0m [90m|[0m [1mfund[0m[90m  Korean localization of Foreman documentation[0m
+[90m────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+  [90mterms hash    [0m0x92e83f08…6cef14 [32m✓ verified[0m
+  [90mfreelancer    [0m0x227f2DCB8815784D78dFfe696EA01120E13e663A
+  [90mescrow        [0m[1m0.2 USDC[0m in 2 milestones, held by Stagepay, not by the agent
+  [90mowner balance [0m0.674852 USDC
+  [90m…[0m approving the policy and funding the job
+
+  [32m✓[0m job funded: [1mjob #2[0m
+  [90mtx            [0m[34mhttps://explorer.arc.io/tx/0xd7f24735ba2d3cd3b8946a1f04206045fb5dc32c4828606817476e1c266fe4cc[0m
+  [90mnext          [0m[36mforeman submit --job 2 --index 0 --note "<deliverable URL>"[0m

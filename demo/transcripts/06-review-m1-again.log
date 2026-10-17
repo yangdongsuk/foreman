@@ -1,0 +1,74 @@
+
+[1m[36m FOREMAN [0m[0m [90m|[0m [1mreview  job #2 · milestone 1/2[0m[90m  Korean README[0m
+[90m────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+  [90mamount        [0m[1m0.05 USDC[0m  [90m(auto-approve cap 0.1 USDC, left today 0.15 USDC)[0m
+  [90mplan hash     [0m0x92e83f08…6cef14 [32m✓ plan file matches the on-chain terms[0m
+  [90mrevisions     [0m1 of 3 used   [90mreview window: 48 h left[0m
+  [90msubmission    [0m[36mRevision done: the limits table is now in README.ko.md. Same PR: https://github.c…[0m
+
+[1mAcceptance criteria[0m
+    1. The pull request targets the yangdongsuk/foreman repository and adds a file named
+    README.ko.md at the repository root.
+    2. README.ko.md contains a Korean heading or section corresponding to every heading in the
+    current README.md, in the same order, with none omitted.
+    3. The limits table from README.md is present in README.ko.md as a Markdown table with the same
+    rows and numeric values as the original, with labels and descriptions translated into Korean.
+    4. The prose of README.ko.md is written in Korean (Hangul) rather than left in English, apart
+    from code blocks, commands, URLs, and product or technical names such as Foreman and USDC.
+    5. Code blocks, commands and links in README.ko.md match those in README.md, and the pull
+    request changes no file other than README.ko.md, apart from an optional link to it in README.md.
+
+[1mTools (pay-per-call, Tollgate vouchers from the session key)[0m
+  [90mtool      [0m  [90m     price[0m
+  [1mhttp-check[0m  0.001 USDC
+  [1mgithub[0m      0.002 USDC
+  [1mrubric[0m      0.005 USDC
+  [90mreview budget   [0m0.02 USDC
+
+[1mReview loop[0m
+  [90m…[0m step 1: thinking
+  [35m◆[0m [2mstep 1[0m  Need evidence: inspect the PR for changed files and diff.
+    [36m→[0m [1mgithub[0m [90m{"url":"https://github.com/yangdongsuk/foreman/pull/1"}[0m  [90mpay 0.002 USDC[0m
+  [90m…[0m calling github
+    [32m✓[0m PR "Add Korean README (README.ko.md)" open · +114/-0 in 1 files…  [90m1336 ms · spent 0.002 USDC[0m
+  [90m…[0m step 2: thinking
+  [35m◆[0m [2mstep 2[0m  The diff excerpt is truncated and I lack the original README.md to compare headings, …
+    [36m→[0m [1mhttp-check[0m [90m{"url":"https://raw.githubusercontent.com/yangdongsuk/forem…[0m  [90mpay 0.001 USDC[0m
+  [90m…[0m calling http-check
+    [32m✓[0m HTTP 200 · 9038 bytes · 48 ms  [90m142 ms · spent 0.003 USDC[0m
+  [90m…[0m step 3: thinking
+  [35m◆[0m [2mstep 3[0m  The PR diff excerpt is cut off before the end of README.ko.md, so I can't see the las…
+    [36m→[0m [1mhttp-check[0m [90m{"url":"https://raw.githubusercontent.com/yangdongsuk/forem…[0m  [90mpay 0.001 USDC[0m
+  [90m…[0m calling http-check
+    [32m✓[0m HTTP 200 · 11703 bytes · 279 ms  [90m444 ms · spent 0.004 USDC[0m
+  [90m…[0m step 4: thinking
+  [35m◆[0m [2mstep 4[0m  Evidence from the GitHub PR and raw files covers all criteria. Approval is within the…
+
+[1mDecision[0m
+  [1;30;42m APPROVE [0m  [1m0.05 USDC[0m
+    PR #1 targets yangdongsuk/foreman (base main) and changes only README.ko.md. The raw file has
+    all 11 headings of README.md in the same order, the 8-row limits table with the same values,
+    Korean prose, and matching code blocks and links. The 0.05 USDC amount is within the 0.1 cap and
+    the 0.15 allowance.
+
+  [32m✓[0m The pull request targets the yangdongsuk/foreman repository and adds a file named README.ko.m…
+[90m      PR #1 is on yangdongsuk/foreman with base main, and its only changed file is README.ko.md with
+      status added.[0m
+  [32m✓[0m README.ko.md contains a Korean heading or section corresponding to every heading in the curre…
+[90m      All 11 headings (Foreman, problem, How it works, agent loop, verifiable log, Tollgate, Circle
+      stack, Deployment, Run it, Repository, Status) appear in Korean in the same order.[0m
+  [32m✓[0m The limits table from README.md is present in README.ko.md as a Markdown table with the same …
+[90m      The Korean table has the same 8 rows as the original, with the same numeric value (max 3
+      revision requests), and translated labels and descriptions.[0m
+  [32m✓[0m The prose of README.ko.md is written in Korean (Hangul) rather than left in English, apart fr…
+[90m      All prose, list items and table text are in Hangul. English remains only in code blocks,
+      identifiers and product names.[0m
+  [32m✓[0m Code blocks, commands and links in README.ko.md match those in README.md, and the pull reques…
+[90m      The diagram and bash blocks, the placeholders and all URLs match the original. The only link
+      difference is the in-page anchor, which is localized to #배포-arc-메인넷. The PR changes one file.[0m
+
+  [90mtool spend    [0m0.004 USDC
+  [90mreason hash   [0m[1m0xc733826e38076b6308431cbe817ed1c8fd5360ee328187b4ed0679b15185fe51[0m
+  [90mon chain      [0m[32m✓[0m approve sent by the agent key
+  [90mtx            [0m[34mhttps://explorer.arc.io/tx/0x68f3a00f44fbbe143160ea4f8bb39883737b9f36983d87e4da8bff80fc590043[0m
+

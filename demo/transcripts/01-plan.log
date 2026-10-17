@@ -1,0 +1,84 @@
+
+[1m[36m FOREMAN [0m[0m [90m|[0m [1mplan[0m[90m  model claude-cli:sonnet[0m
+[90m────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+  [90mbrief         [0m
+    Localize Foreman's documentation for our Korean freelancers. Milestone 1 (0.05 USDC):
+    README.ko.md, a complete and natural Korean translation of README.md that keeps every section
+    including the limits table, submitted as a pull request to github.com/yangdongsuk/foreman.
+    Milestone 2 (0.15 USDC): a Korean landing page published at
+    https://yangdongsuk.github.io/foreman/ko.html that explains how Foreman works, lists the limits
+    the contract enforces, and links to the dashboard and the Korean README. Three days per
+    milestone.
+  [90mbudget        [0mup to 0.2 USDC
+  [90magent limit   [0mauto-approves up to 0.1 USDC per milestone
+
+  [90m…[0m drafting scope, milestones and acceptance criteria
+
+[1m[1mKorean localization of Foreman documentation[0m[0m
+  Two sequential milestones: (1) a complete Korean README.ko.md submitted as a pull request to
+  yangdongsuk/foreman, and (2) a Korean landing page at
+  https://yangdongsuk.github.io/foreman/ko.html explaining how Foreman works, listing enforced
+  contract limits, and linking to the dashboard and the Korean README. Total 0.2 USDC, 3 days per
+  milestone.
+
+  [90m#[0m  [90mmilestone          [0m  [90mUSDC[0m  [90mdue[0m  [90mapproval     [0m
+  1  [1mKorean README[0m        0.05   3d  [32magent auto[0m   
+  2  [1mKorean landing page[0m  0.15   3d  [33mowner co-sign[0m
+  [90mtotal         [0m[1m0.2 USDC[0m of 0.2 USDC budget   review period 48 h
+
+[1mMilestone 1: Korean README[0m
+[90m  Deliverable: A GitHub pull request URL to github.com/yangdongsuk/foreman that adds README.ko.md, a
+  complete Korean translation of README.md.[0m
+    - The pull request targets the yangdongsuk/foreman repository and adds a file named README.ko.md
+    at the repository root.
+    - README.ko.md contains a Korean heading or section corresponding to every heading in the
+    current README.md, in the same order, with none omitted.
+    - The limits table from README.md is present in README.ko.md as a Markdown table with the same
+    rows and numeric values as the original, with labels and descriptions translated into Korean.
+    - The prose of README.ko.md is written in Korean (Hangul) rather than left in English, apart
+    from code blocks, commands, URLs, and product or technical names such as Foreman and USDC.
+    - Code blocks, commands and links in README.ko.md match those in README.md, and the pull request
+    changes no file other than README.ko.md, apart from an optional link to it in README.md.
+
+[1mMilestone 2: Korean landing page[0m
+[90m  Deliverable: The live URL https://yangdongsuk.github.io/foreman/ko.html, publicly reachable, with
+  its source added to the repository (a PR or commit link may be provided as supporting evidence).[0m
+    - Fetching https://yangdongsuk.github.io/foreman/ko.html returns HTTP 200 and the visible page
+    text is primarily Korean (Hangul).
+    - The page has a section, with a Korean heading, that explains how Foreman works in steps,
+    covering at least: the brief or plan, USDC escrow of milestones, submission of a deliverable,
+    automated review, and payment on approval.
+    - The page lists the limits the contract enforces, with the same values as the limits table in
+    README.md, expressed in Korean.
+    - The page contains a hyperlink to the Foreman dashboard, using the same dashboard URL given in
+    README.md.
+    - The page contains a hyperlink to the Korean README, pointing to README.ko.md in the
+    yangdongsuk/foreman repository on GitHub.
+
+[1mWhy this plan[0m
+  The work splits naturally into the translation (milestone 1) and the landing page (milestone 2),
+  which depends on it because the page must link to the Korean README. Amounts follow the owner's
+  brief (0.05 and 0.15 USDC, summing exactly to the 0.2 budget). Milestone 2 at 0.15 exceeds the 0.1
+  USDC agent auto-approval threshold, so it needs the owner's co-signature. The brief gave that
+  split, and it is kept rather than distorted. Criteria are written to be checkable from the public
+  PR diff and the live page text and links.
+
+[1mRisks[0m
+  - Milestone 2 (0.15 USDC) exceeds the 0.1 USDC agent auto-approval limit, so it requires the
+  owner's co-signature, which may delay payout.
+  - The brief does not say where the dashboard URL is. The plan assumes it is in README.md, so if it
+  is not, the freelancer needs it supplied.
+  - "Complete and natural" translation quality is only partly checkable by an automated reviewer.
+  The criteria focus on structural completeness, so awkward Korean may still pass.
+  - Milestone 2 depends on README.ko.md being merged or at least at a stable public URL. If the PR
+  is not merged, the link to the Korean README may return 404 at review time.
+  - GitHub Pages publication depends on repository settings and build delays. The freelancer needs
+  write or deploy access, or the owner must merge and publish promptly.
+  - The README.md may change between the start of work and review, which could cause section
+  mismatches. Review should compare against the version at funding time.
+  - Fixed three-day deadlines for each milestone run from funding, so milestone 2 cannot
+  realistically start until milestone 1 is done unless the freelancer works in parallel.
+
+  [32m✓[0m signed off. terms hash [1m0x92e83f085e62697eb5839189f3a50da70c3d68be99dc6fa0903ede42846cef14[0m
+  [90msaved         [0mplans/0x92e83f085e62697eb5839189f3a50da70c3d68be99dc6fa0903ede42846cef14.json
+  [90mnext          [0m[36mforeman fund --plan 0x92e83f085e62697eb5839189f3a50da70c3d68be99dc6fa0903ede42846cef14 --freelancer <address>[0m
