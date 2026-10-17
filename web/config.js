@@ -12,11 +12,11 @@ export const RPC = pick('rpc', 'https://rpc.mainnet.arc.io');
 export const EXPLORER = pick('explorer', 'https://explorer.arc.io');
 
 // ForemanPolicy deployment (empty string = not deployed yet).
-export const POLICY = pick('policy', '');
+export const POLICY = pick('policy', '0x2065a64a410E0610ebD654b4eC4ADE142e9A68E2');
 // Block of the ForemanPolicy deployment; log scans start here (keep it exact, Arc blocks are sub-second).
-export const POLICY_DEPLOY_BLOCK = Number(pick('block', 0));
+export const POLICY_DEPLOY_BLOCK = Number(pick('block', 26454642));
 // Tollgate channel id (bytes32) that pays for the agent's tools; empty = skip the tool-spend card.
-export const TOOLS_CHANNEL = pick('channel', '');
+export const TOOLS_CHANNEL = pick('channel', '0x4a812a137c3fc2ba927bafd8df8edc0b155d13966939cfdb594306a994952289');
 
 // Contracts already live on Arc mainnet.
 export const STAGEPAY = pick('stagepay', '0x0A87039a127b600cF9B85d4C33d97c08054e15E6');
