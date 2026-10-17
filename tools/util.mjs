@@ -64,7 +64,7 @@ export function htmlToText(html) {
   ));
 }
 
-export function htmlFacts(html) {
+export function htmlFacts(html, baseUrl) {
   const inner = (re) => {
     const m = re.exec(html);
     return m ? squash(decodeEntities(m[1].replace(/<[^>]+>/g, ''))) : '';
@@ -81,6 +81,13 @@ export function htmlFacts(html) {
     h1: inner(/<h1\b[^>]*>([\s\S]*?)<\/h1>/i),
     metaDescription,
     linkCount: (html.match(/<a\s[^>]*\bhref\s*=/gi) || []).length,
+    // Link targets matter when a deliverable must link somewhere; resolve them so a reviewer can compare URLs.
+    links: [...html.matchAll(/<a\s[^>]*\bhref\s*=\s*(?:"([^"]*)"|'([^']*)')[^>]*>([\s\S]*?)<\/a>/gi)].slice(0, 40).map((m) => {
+      const raw = decodeEntities(m[1] ?? m[2] ?? '');
+      let href = raw;
+      try { if (baseUrl && !raw.startsWith('data:')) href = new URL(raw, baseUrl).href; } catch { /* keep raw */ }
+      return { text: squash(decodeEntities(m[3].replace(/<[^>]+>/g, ''))).slice(0, 80), href: href.slice(0, 300) };
+    }),
   };
 }
 

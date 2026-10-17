@@ -9,7 +9,7 @@ export const httpCheck = {
   method: 'GET',
   path: '/tools/http-check',
   price: 1000n, // 0.001 USDC
-  description: 'Fetch a public URL (10s timeout, follows redirects) and report status, latency, title, first h1, meta description, link count and a text sample. Use it to verify that a deployed site or page exists and says what the freelancer claims.',
+  description: 'Fetch a public URL (10s timeout, follows redirects) and report status, latency, title, first h1, meta description, links (text and resolved href) and a text sample (raw text files are returned whole). Use it to verify that a deployed site or page exists and says what the freelancer claims.',
   params: { url: { in: 'query', type: 'string', required: true, description: 'http(s) URL to fetch' } },
 
   validate({ url }) {
@@ -57,7 +57,7 @@ export const httpCheck = {
           contentType,
           bytes: bytes.length,
           truncated,
-          ...(isHtml ? htmlFacts(body) : { title: '', h1: '', metaDescription: '', linkCount: 0 }),
+          ...(isHtml ? htmlFacts(body, current.href) : { title: '', h1: '', metaDescription: '', linkCount: 0, links: [] }),
           // Page text stays short; a raw text file (a README, a diff) is returned whole so a reviewer can check all of it.
           textSample: isHtml ? clip(htmlToText(body), 3000) : isText ? clip(body.trim(), 16000) : '',
         };

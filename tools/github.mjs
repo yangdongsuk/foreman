@@ -36,7 +36,9 @@ async function gh(path, accept = 'application/vnd.github+json', maxBytes = 1_000
     err.status = res.status;
     throw err;
   }
-  return /json/.test(res.headers.get('content-type') || '') ? JSON.parse(text) : text;
+  // Raw media types (README, diffs) come back as e.g. 'application/vnd.github.raw+json' but the body is plain text.
+  const ct = res.headers.get('content-type') || '';
+  return /json/.test(ct) && !/raw|diff/.test(accept) ? JSON.parse(text) : text;
 }
 const soft = (p) => p.catch(() => null); // secondary lookups must not sink the whole result
 
