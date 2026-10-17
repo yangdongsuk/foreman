@@ -19,7 +19,7 @@ export const MAX_STEPS = 6;
 export const MAX_REVISIONS = 3; // Stagepay's own cap; after this the owner must decide
 export const WINDOW_MARGIN_S = 600; // escalate when less than 10 minutes of review window remain
 export const FEEDBACK_MAX = 500;
-const EVIDENCE_PROMPT_CHARS = 14_000;
+const EVIDENCE_PROMPT_CHARS = 40_000; // enough to show a whole deliverable file to the model
 
 // ------------------------------------------------------------------ prompts
 
@@ -101,7 +101,7 @@ function buildPrompt(s) {
   }
   lines.push('', `## Evidence so far (${evidence.length} tool result${evidence.length === 1 ? '' : 's'})`);
   if (!evidence.length) lines.push('(none yet)');
-  const per = Math.min(4000, Math.max(1200, Math.floor(EVIDENCE_PROMPT_CHARS / Math.max(1, evidence.length))));
+  const per = Math.min(18_000, Math.max(1200, Math.floor(EVIDENCE_PROMPT_CHARS / Math.max(1, evidence.length))));
   for (const e of evidence) {
     lines.push(`### step ${e.step}: ${e.tool} ${JSON.stringify(e.args)}`);
     lines.push(e.ok ? clip(JSON.stringify(e.result), per) : `FAILED: ${e.error}`);

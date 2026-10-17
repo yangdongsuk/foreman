@@ -58,7 +58,8 @@ export const httpCheck = {
           bytes: bytes.length,
           truncated,
           ...(isHtml ? htmlFacts(body) : { title: '', h1: '', metaDescription: '', linkCount: 0 }),
-          textSample: isHtml ? clip(htmlToText(body), 3000) : isText ? clip(body.trim(), 3000) : '',
+          // Page text stays short; a raw text file (a README, a diff) is returned whole so a reviewer can check all of it.
+          textSample: isHtml ? clip(htmlToText(body), 3000) : isText ? clip(body.trim(), 16000) : '',
         };
       }
     } catch (e) {
