@@ -28,39 +28,33 @@ export function parseSubtitles(text) {
   return cues;
 }
 
-let edgeInfo = null;
-export function findEdgeTts() {
-  if (edgeInfo) return edgeInfo;
-  const candidates = [
-    process.env.EDGE_TTS_BIN,
-    join(TOOLKIT, '.venv/bin/edge-tts'),
-    join(TOOLKIT, '.venv/Scripts/edge-tts.exe'),
-    'edge-tts',
-    join(process.env.HOME ?? '', 'project/MoneyPrinterTurbo/.venv/bin/edge-tts'),
-  ].filter(Boolean);
-  edgeInfo = { candidates };
-  return edgeInfo;
-}
-
-async function resolveEdgeBin() {
-  const info = findEdgeTts();
-  if (info.bin) return info.bin;
-  for (const bin of info.candidates) {
-    if (bin.includes('/') && !existsSync(bin)) continue;
-    try {
-      const { stdout, stderr } = await run(bin, ['--version'], { timeout: 20_000 });
-      const version = (stdout + stderr).match(/(\d+)\.(\d+)\.(\d+)/);
-      info.bin = bin;
-      info.version = version ? version.slice(1).map(Number) : null;
-      if (info.version && (info.version[0] < 7 || (info.version[0] === 7 && info.version[1] < 3))) {
-        log.warn(`${bin} is edge-tts ${info.version.join('.')}; versions below 7.3 get "403 Invalid response status" from Microsoft. Run scripts/video/setup.sh to install a current one locally.`);
+// Which edge-tts to run: $EDGE_TTS_BIN, the local venv from setup.sh, PATH, then the MoneyPrinterTurbo venv.
+// Resolved once (TTS jobs run in parallel) and version-checked: edge-tts < 7.3 is rejected by Microsoft with a 403.
+let edgeBin = null;
+function resolveEdgeBin() {
+  edgeBin ??= (async () => {
+    const candidates = [
+      process.env.EDGE_TTS_BIN,
+      join(TOOLKIT, '.venv/bin/edge-tts'),
+      'edge-tts',
+      join(process.env.HOME ?? '', 'project/MoneyPrinterTurbo/.venv/bin/edge-tts'),
+    ].filter(Boolean);
+    for (const bin of candidates) {
+      if (bin.includes('/') && !existsSync(bin)) continue;
+      try {
+        const { stdout, stderr } = await run(bin, ['--version'], { timeout: 20_000 });
+        const v = (stdout + stderr).match(/(\d+)\.(\d+)\.(\d+)/)?.slice(1).map(Number);
+        if (v && (v[0] < 7 || (v[0] === 7 && v[1] < 3))) {
+          log.warn(`${bin} is edge-tts ${v.join('.')}; versions below 7.3 get "403 Invalid response status" from Microsoft. Run scripts/video/setup.sh to install a current one locally.`);
+        }
+        return bin;
+      } catch {
+        /* try the next candidate */
       }
-      return bin;
-    } catch {
-      /* try next candidate */
     }
-  }
-  fail(`edge-tts not found. Run scripts/video/setup.sh (installs it into scripts/video/.venv), or set EDGE_TTS_BIN=/path/to/edge-tts, or use --tts say.`);
+    fail('edge-tts not found. Run scripts/video/setup.sh (installs it into scripts/video/.venv), or set EDGE_TTS_BIN=/path/to/edge-tts, or use --tts say.');
+  })();
+  return edgeBin;
 }
 
 export function splitSentences(text) {

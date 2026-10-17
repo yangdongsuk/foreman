@@ -109,3 +109,11 @@ test('wrapRow: word wrap with hanging indent, hard wrap fallback, width never ex
   assert.deepEqual(hard.map(rowWidth), [30, 30, 30, 10]);
   assert.equal(wrapRow(parseAnsi('short')[0], 40).length, 1);
 });
+
+test('tokenNeed: long unbreakable tokens set the width, prose does not', async () => {
+  const { tokenNeed } = await import('../lib/ansi.mjs');
+  const url = 'https://explorer.arc.io/tx/0x' + 'ab'.repeat(32);
+  assert.equal(tokenNeed(parseAnsi(`  tx        ${url}`)[0]), 2 + 2 + 8 + url.length);
+  assert.equal(tokenNeed(parseAnsi('words '.repeat(60))[0]), 0);
+  assert.equal(tokenNeed(parseAnsi('short tokens only here')[0]), 0);
+});

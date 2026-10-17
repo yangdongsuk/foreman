@@ -1,0 +1,12 @@
+{
+  "name": "foreman-video-toolkit",
+  "private": true,
+  "type": "module",
+  "description": "Storyboard -> demo video (1920x1080, 30 fps, H.264 + AAC). No dependencies: Node 24, ffmpeg, Chrome, edge-tts (setup.sh).",
+  "scripts": {
+    "setup": "./setup.sh",
+    "test": "node --test test/*.test.mjs",
+    "plan": "node build.mjs storyboard.example.json --plan",
+    "sample": "node build.mjs storyboard.example.json out/sample.mp4"
+  }
+}

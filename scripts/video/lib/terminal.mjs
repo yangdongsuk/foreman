@@ -1,7 +1,7 @@
 // Terminal segment: ANSI log -> macOS-style window, revealed line by line, scrolling once the window is full.
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { THEME, parseAnsi, rowToHtml, rowWidth, wrapRow } from './ansi.mjs';
+import { THEME, parseAnsi, rowToHtml, rowWidth, tokenNeed, wrapRow } from './ansi.mjs';
 import { renderTemplate } from './template.mjs';
 import { ensureDir, escapeHtml, fail, fileUrl, sha1 } from './util.mjs';
 
@@ -50,9 +50,11 @@ export async function renderTerminal(page, seg, { workDir, toolkitDir, nominalSe
   const parsed = parseAnsi(text);
   if (!parsed.length) fail(`${label}: log ${seg.logPath} is empty (after stripping control codes)`);
 
-  // size the window to typical lines (90th percentile), not the longest one: long prose just wraps
+  // size the window to typical lines (90th percentile) but wide enough that no long token (tx URL, hash) must be cut;
+  // long prose just wraps at word boundaries
   const widths = parsed.map(rowWidth).sort((a, b) => a - b);
-  const contentCols = clamp(widths[Math.min(widths.length - 1, Math.floor(widths.length * 0.9))], 60, 130);
+  const typical = widths[Math.min(widths.length - 1, Math.floor(widths.length * 0.9))];
+  const contentCols = clamp(Math.max(typical, ...parsed.map(tokenNeed)), 60, 150);
   const L = terminalLayout({ rows: seg.rows, fontSize: seg.fontSize, captions, contentCols });
   const prompt = seg.prompt ?? '\x1b[1;38;5;141m❯\x1b[0m';
 
@@ -75,6 +77,7 @@ export async function renderTerminal(page, seg, { workDir, toolkitDir, nominalSe
   const dir = ensureDir(join(workDir, label.replace(/\W+/g, '-')));
   const pageFile = join(dir, 'page.html');
   writeFileSync(pageFile, html);
+  await page.setViewport({ width: 1920, height: 1080, scale: 1 });
   await page.goto(fileUrl(pageFile));
 
   // ---- states: { t, html }

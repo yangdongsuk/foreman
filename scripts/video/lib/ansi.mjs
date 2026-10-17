@@ -288,6 +288,25 @@ export function parseAnsi(input, { tabWidth = 8 } = {}) {
 // ---------------------------------------------------------------- layout helpers
 export const rowWidth = (row) => row.reduce((n, cell) => n + cell.w, 0);
 
+/**
+ * Columns a row needs so that none of its words has to be cut: the end column of its longest unbreakable token.
+ * (A tx URL or hash can't wrap gracefully; prose can.)
+ */
+export function tokenNeed(row) {
+  let col = 0;
+  let need = 0;
+  let tokenStart = null;
+  for (const cell of row) {
+    if (cell.c === ' ') {
+      if (tokenStart !== null) need = Math.max(need, col - tokenStart > 12 ? col : 0);
+      tokenStart = null;
+    } else if (cell.w > 0 && tokenStart === null) tokenStart = col;
+    col += cell.w;
+  }
+  if (tokenStart !== null && col - tokenStart > 12) need = Math.max(need, col);
+  return need;
+}
+
 /** Word-aware wrap of one logical row to `cols` cells, with a hanging indent equal to its leading spaces. */
 export function wrapRow(row, cols) {
   if (rowWidth(row) <= cols) return [row];

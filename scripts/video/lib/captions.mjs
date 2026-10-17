@@ -3,7 +3,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { cuesFromText, weight } from './tts.mjs';
 import { renderTemplate } from './template.mjs';
-import { escapeHtml, fileUrl } from './util.mjs';
+import { escapeHtml, ensureDir, fileUrl, secs } from './util.mjs';
 
 export const STRIP_H = 240; // overlay strip height; placed at the bottom of the frame
 export const LINE_CHARS = 52;
@@ -113,4 +113,51 @@ export function toSrt(entries) {
     return `${p(Math.floor(ms / 3600000))}:${p(Math.floor(ms / 60000) % 60)}:${p(Math.floor(ms / 1000) % 60)},${p(ms % 1000, 3)}`;
   };
   return entries.map((e, i) => `${i + 1}\n${ts(e.start)} --> ${ts(e.end)}\n${e.lines.join('\n')}\n`).join('\n');
+}
+
+/** All caption entries on the global timeline (seconds), never overlapping. */
+export function captionEntries(segments) {
+  const entries = [];
+  for (const seg of segments) {
+    if (!seg.audio) continue;
+    const offset = secs(seg.narrationF);
+    for (const ch of segmentChunks(seg)) entries.push({ start: offset + ch.start, end: Math.min(offset + ch.end, secs(seg.B + seg.D)), lines: ch.lines });
+  }
+  entries.sort((a, b) => a.start - b.start);
+  for (let i = 0; i + 1 < entries.length; i++) entries[i].end = Math.min(entries[i].end, entries[i + 1].start);
+  return entries.filter((e) => e.end - e.start > 0.05);
+}
+
+/**
+ * Render one transparent PNG per distinct caption and write the ffmpeg concat list that plays them on the global
+ * timeline (blank frames in the gaps). Returns the list file path.
+ */
+export async function buildCaptionTrack(entries, { browser, toolkitDir, workDir, total }) {
+  const page = await openCaptionPage(browser, { toolkitDir, workDir });
+  try {
+    const dir = ensureDir(join(workDir, 'captions'));
+    const blank = join(dir, 'blank.png');
+    await renderBlankPng(page, blank);
+    const q = (p) => `file '${p.replace(/'/g, "'\\''")}'`;
+    const lines = [];
+    const seen = new Map();
+    let t = 0;
+    for (const [i, e] of entries.entries()) {
+      if (e.start > t + 0.001) lines.push(q(blank), `duration ${(e.start - t).toFixed(6)}`);
+      const key = e.lines.join('\n');
+      if (!seen.has(key)) {
+        const png = join(dir, `cap-${String(i).padStart(3, '0')}.png`);
+        await renderCaptionPng(page, e.lines, png);
+        seen.set(key, png);
+      }
+      lines.push(q(seen.get(key)), `duration ${(e.end - e.start).toFixed(6)}`);
+      t = e.end;
+    }
+    lines.push(q(blank), `duration ${Math.max(0.1, total - t + 0.5).toFixed(6)}`, q(blank)); // pad past the end; -t trims
+    const listFile = join(workDir, 'captions.txt');
+    writeFileSync(listFile, lines.join('\n') + '\n');
+    return listFile;
+  } finally {
+    await page.close();
+  }
 }

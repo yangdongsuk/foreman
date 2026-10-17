@@ -32,7 +32,7 @@ window.__ready = (async () => {
   const P = window.__p;
   const im = document.getElementById('im');
   try { await im.decode(); } catch (e) { return 'decode-failed'; }
-  const nw = im.naturalWidth || P.vw, nh = im.naturalHeight || P.vh;
+  const nw = (P.natural && P.natural.w) || im.naturalWidth || P.vw, nh = (P.natural && P.natural.h) || im.naturalHeight || P.vh;
   const c = P.crop || { x: 0, y: 0, width: nw, height: nh };
   const s = P.fit === 'cover' ? Math.max(P.vw / c.width, P.vh / c.height) : Math.min(P.vw / c.width, P.vh / c.height);
   if (P.fit === 'blur') document.getElementById('bg').style.display = 'block';
@@ -49,6 +49,21 @@ window.__ready = (async () => {
   return 'ok';
 })();`;
 
+/** Chrome reports 300x150 for an SVG with only a viewBox; read the real size so crops and fits use it. */
+export function svgSize(file) {
+  if (!/\.svg$/i.test(file)) return null;
+  const head = readFileSync(file, 'utf8').slice(0, 4000);
+  const tag = head.match(/<svg\b[^>]*>/i)?.[0];
+  if (!tag) return null;
+  const attr = (n) => tag.match(new RegExp(`\\s${n}\\s*=\\s*["']([^"']+)["']`, 'i'))?.[1];
+  const num = (v) => (v && /^[\d.]+(px)?$/.test(v.trim()) ? parseFloat(v) : null);
+  const w = num(attr('width'));
+  const h = num(attr('height'));
+  if (w && h) return { w, h };
+  const vb = attr('viewBox')?.trim().split(/[\s,]+/).map(Number);
+  return vb && vb.length === 4 && vb[2] > 0 && vb[3] > 0 ? { w: vb[2], h: vb[3] } : null;
+}
+
 export async function renderImage(page, seg, { workDir, settings }) {
   const vw = 1920;
   const vh = 1080;
@@ -60,7 +75,7 @@ html,body{margin:0;width:${vw}px;height:${vh}px;overflow:hidden;background:${set
 #box{position:absolute;overflow:hidden}#im{position:absolute;max-width:none;display:block}
 #bg{display:none;position:absolute;left:-80px;top:-80px;width:${vw + 160}px;height:${vh + 160}px;object-fit:cover;filter:blur(46px) brightness(.5) saturate(1.1)}
 </style></head><body><img id="bg" src="${escapeHtml(fileUrl(seg.imagePath))}"><div id="box"><img id="im" src="${escapeHtml(fileUrl(seg.imagePath))}"></div>
-<script>window.__p = ${JSON.stringify({ vw, vh, crop: seg.crop, fit: seg.fit })};</script>
+<script>window.__p = ${JSON.stringify({ vw, vh, crop: seg.crop, fit: seg.fit, natural: svgSize(seg.imagePath) })};</script>
 <script>${IMAGE_LAYOUT_JS}</script></body></html>`,
   );
   await page.setViewport({ width: vw, height: vh, scale: renderScale(seg) });

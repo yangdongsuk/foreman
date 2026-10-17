@@ -229,7 +229,13 @@ export class Page {
     this.inflight.clear();
     const loaded = this.once('Page.loadEventFired', timeout);
     loaded.catch(() => {}); // avoid an unhandled rejection if navigate() throws first
-    const nav = await this.cdp('Page.navigate', { url }, timeout);
+    let nav;
+    try {
+      nav = await this.cdp('Page.navigate', { url }, timeout);
+    } catch (e) {
+      if (/did not answer Page\.navigate/.test(e.message)) fail(`cannot open ${url}: no response within ${timeout / 1000}s (offline, DNS or server problem? raise "timeout" for slow sites)`);
+      throw e;
+    }
     if (nav.errorText) fail(`cannot open ${url}: ${nav.errorText}`);
     try {
       await loaded;

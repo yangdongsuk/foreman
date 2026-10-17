@@ -13,7 +13,7 @@ async function transitionClip(prev, next, { X, transition, draft, force }) {
   const key = sha1('xfade-v1', basename(prev.b), basename(next.a), transition, X, !!draft).slice(0, 24);
   const out = join(dirname(prev.b), `xf-${key}.mp4`);
   if (!force && existsSync(out)) return out;
-  const tmp = out.replace(/\.mp4$/, '.part.mp4');
+  const tmp = out.replace(/\.mp4$/, `.${process.pid}.part.mp4`);
   await ffmpeg([
     '-i', prev.b,
     '-i', next.a,

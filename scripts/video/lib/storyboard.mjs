@@ -15,6 +15,8 @@
 //     "segments": [ ... ]
 //   }
 //
+// File paths (html, log, path, url, music, $file) are relative to the storyboard file, then to scripts/video/.
+//
 // Every segment: { "type", "narration"?, "duration"?, "lead"?, "tail"?, "caption"? }
 //   narration  text to speak. Segment length = narration audio + lead + tail (0.4 s) unless "duration" is set.
 //   duration   explicit seconds (required when there is no narration). Longer than the audio = a silent hold.
@@ -65,7 +67,7 @@ const FIELDS = {
   image: ['path', 'fit', 'crop', ...MOTION],
 };
 
-const SETTING_KEYS = [...Object.keys(DEFAULTS), 'segments', 'maxDuration'];
+const SETTING_KEYS = [...Object.keys(DEFAULTS), 'segments'];
 
 function resolveFile(p, dirs, what) {
   if (typeof p !== 'string' || !p) fail(`${what}: expected a file path`);

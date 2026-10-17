@@ -2,12 +2,12 @@
 // Storyboard -> demo video (1920x1080, 30 fps, H.264 + AAC). See lib/storyboard.mjs for the storyboard schema.
 //
 //   node build.mjs storyboard.json out/demo.mp4 [options]      (node build.mjs --help)
-import { rmSync, statSync, writeFileSync } from 'node:fs';
-import { basename, dirname, join, resolve } from 'node:path';
+import { renameSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { basename, dirname, extname, join, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 import { assemble } from './lib/assemble.mjs';
 import { buildNarrationTrack, mixMusic, normalizeLoudness, reportLoudness } from './lib/audio.mjs';
-import { openCaptionPage, renderBlankPng, renderCaptionPng, segmentChunks, toSrt } from './lib/captions.mjs';
+import { buildCaptionTrack, captionEntries as captionTimeline, toSrt } from './lib/captions.mjs';
 import { Browser } from './lib/chrome.mjs';
 import { encodeClip } from './lib/clips.mjs';
 import { TOOLKIT_DIR, loadStoryboard, planTimeline } from './lib/storyboard.mjs';
@@ -40,6 +40,8 @@ Options
   -v, --verbose         print every ffmpeg command
   -h, --help
 
+Setup (once):  ./setup.sh   installs edge-tts >= 7.3 into scripts/video/.venv (older versions get HTTP 403 from Microsoft)
+Cache:  scripts/video/cache (narration audio, encoded clips); delete it to start clean, or set FOREMAN_VIDEO_CACHE.
 Capture a real terminal session with colors:  FORCE_COLOR=1 node agent/foreman.mjs review --job 3 2>&1 | tee review.log
 Storyboard schema: see the header of lib/storyboard.mjs and storyboard.example.json.
 `;
@@ -120,7 +122,7 @@ async function main() {
 
   // ------------------------------------------------------------------ 1. narration
   const narrated = segments.filter((s) => s.narration);
-  log.step(`Narration: ${narrated.length} segment${narrated.length === 1 ? '' : 's'} (${settings.tts}, ${settings.voice}, ${settings.rate})`);
+  log.step(`Narration: ${narrated.length} segment${narrated.length === 1 ? '' : 's'} (${settings.tts === 'say' ? 'macOS say' : `edge-tts, ${settings.voice}`}, rate ${settings.rate})`);
   await pool(narrated, Math.max(1, numOpt('jobs', opt.jobs)), async (seg) => {
     seg.audio = await synthesize(seg.narration, { engine: settings.tts, voice: settings.voice, rate: settings.rate, pitch: settings.pitch, volume: settings.volume, cacheDir, noCache });
   });
@@ -181,42 +183,12 @@ async function main() {
     if (firstError) throw firstError;
 
     // ---------------------------------------------------------------- captions
-    const entries = [];
-    for (const seg of segments) {
-      if (!seg.audio) continue;
-      const offset = secs(seg.narrationF);
-      for (const ch of segmentChunks(seg)) entries.push({ start: offset + ch.start, end: Math.min(offset + ch.end, secs(seg.B + seg.D)), lines: ch.lines });
-    }
-    entries.sort((a, b) => a.start - b.start);
-    for (let i = 0; i + 1 < entries.length; i++) entries[i].end = Math.min(entries[i].end, entries[i + 1].start); // never overlap
-    captionEntries = entries.filter((e) => e.end - e.start > 0.05);
+    captionEntries = captionTimeline(segments);
     if (captionEntries.length) {
       writeFileSync(outFile.replace(/\.[^.]+$/, '') + '.srt', toSrt(captionEntries));
       if (captionsOn) {
         log.step(`Captions: ${captionEntries.length}`);
-        const capPage = await openCaptionPage(browser, { toolkitDir: TOOLKIT_DIR, workDir });
-        const dir = ensureDir(join(workDir, 'captions'));
-        const blank = join(dir, 'blank.png');
-        await renderBlankPng(capPage, blank);
-        const lines = [];
-        const q = (p) => `file '${p.replace(/'/g, "'\\''")}'`;
-        let t = 0;
-        const seen = new Map();
-        for (const [i, e] of captionEntries.entries()) {
-          if (e.start > t + 0.001) lines.push(q(blank), `duration ${(e.start - t).toFixed(6)}`);
-          const key = e.lines.join('\n');
-          if (!seen.has(key)) {
-            const png = join(dir, `cap-${String(i).padStart(3, '0')}.png`);
-            await renderCaptionPng(capPage, e.lines, png);
-            seen.set(key, png);
-          }
-          lines.push(q(seen.get(key)), `duration ${(e.end - e.start).toFixed(6)}`);
-          t = e.end;
-        }
-        lines.push(q(blank), `duration ${Math.max(0.1, total - t + 0.5).toFixed(6)}`, q(blank));
-        captionList = join(workDir, 'captions.txt');
-        writeFileSync(captionList, lines.join('\n') + '\n');
-        await capPage.close();
+        captionList = await buildCaptionTrack(captionEntries, { browser, toolkitDir: TOOLKIT_DIR, workDir, total });
       }
     }
     await page.close();
@@ -236,29 +208,37 @@ async function main() {
 
   // ------------------------------------------------------------------ 5. assemble
   log.step('Encoding');
-  await assemble({
-    clips,
-    crossfadeFrames,
-    transition: settings.transition,
-    draft: opt.draft,
-    force: noCache,
-    workDir,
-    captionList,
-    audioFile,
-    outFile,
-    totalFrames,
-    crf: opt.draft ? 26 : Number(opt.crf),
-    preset: opt.draft ? 'ultrafast' : opt.preset,
-    title: settings.title,
-  });
+  // encode to a temp name: a failed or interrupted build never leaves a truncated file at the final path
+  const partFile = join(dirname(outFile), `${basename(outFile, extname(outFile))}.${process.pid}.part${extname(outFile) || '.mp4'}`);
+  try {
+    await assemble({
+      clips,
+      crossfadeFrames,
+      transition: settings.transition,
+      draft: opt.draft,
+      force: noCache,
+      workDir,
+      captionList,
+      audioFile,
+      outFile: partFile,
+      totalFrames,
+      crf: opt.draft ? 26 : Number(opt.crf),
+      preset: opt.draft ? 'ultrafast' : opt.preset,
+      title: settings.title,
+    });
+  } catch (e) {
+    rmSync(partFile, { force: true });
+    throw e;
+  }
 
   // ------------------------------------------------------------------ 6. verify + report
-  const info = await probe(outFile);
+  const info = await probe(partFile);
   const v = info.streams.find((s) => s.codec_type === 'video');
   const a = info.streams.find((s) => s.codec_type === 'audio');
   if (!v || !a) fail(`output is missing a ${!v ? 'video' : 'audio'} stream`);
   const dur = Number(info.format.duration);
-  const loud = await reportLoudness(outFile).catch(() => null);
+  const loud = await reportLoudness(partFile).catch(() => null);
+  renameSync(partFile, outFile);
   const [fn, fd] = v.r_frame_rate.split('/').map(Number);
   console.error('');
   log.ok(c.bold(outFile));
@@ -267,6 +247,8 @@ async function main() {
   if (captionEntries.length) log.info(`captions: ${captionsOn ? 'burned in' : 'not burned in'}; ${outFile.replace(/\.[^.]+$/, '')}.srt written`);
   if (v.width !== 1920 || v.height !== 1080) log.warn(`unexpected resolution ${v.width}x${v.height}`);
   if (Math.abs(dur - total) > 0.15) log.warn(`duration ${dur.toFixed(2)}s differs from the planned ${total.toFixed(2)}s`);
+  if (v.nb_frames && Number(v.nb_frames) !== totalFrames) log.warn(`video has ${v.nb_frames} frames, planned ${totalFrames}`);
+  if (Math.abs(Number(a.duration) - dur) > 0.1) log.warn(`audio (${Number(a.duration).toFixed(2)}s) and video (${dur.toFixed(2)}s) lengths differ`);
   if (dur > maxDuration) log.warn(`${c.bold(`video is ${fmtTime(dur)}, over the ${fmtTime(maxDuration)} limit`)}: shorten narration or cut a segment (node build.mjs ${storyboardFile} --plan shows per-segment lengths)`);
   log.info(`built in ${((Date.now() - t0) / 1000).toFixed(0)}s`);
   if (!opt['keep-work']) rmSync(workDir, { recursive: true, force: true });

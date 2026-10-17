@@ -5,6 +5,7 @@ import { join } from 'node:path';
 import { FPS, WIDTH, HEIGHT, ensureDir, ffmpeg, fail, sha1 } from './util.mjs';
 
 const ENCODER_VERSION = 'clip-v2';
+const encoding = new Map(); // key -> promise: identical clips (a repeated slide) are encoded once, never concurrently
 
 // RGB PNG -> BT.709 limited-range YUV 4:2:0, tagged as such, so brand colors survive.
 const TO_YUV = 'scale=in_range=full:out_range=tv:out_color_matrix=bt709:flags=lanczos+accurate_rnd+full_chroma_int,format=yuv420p';
@@ -118,11 +119,26 @@ export async function encodeClip(seg, visual, { cacheDir, workDir, settings, dra
   const outs = ranges.map((r) => ({ ...r, file: join(dir, `${key.slice(0, 24)}-${r.name}.mp4`) }));
   const result = Object.fromEntries(outs.map((o) => [o.name, o.file]));
   if (!force && outs.every((o) => existsSync(o.file))) return { ...result, cached: true };
+  if (encoding.has(key)) {
+    await encoding.get(key);
+    return { ...result, cached: true };
+  }
+  const job = encodePieces({ seg, inputArgs, chain, outs, draft });
+  encoding.set(key, job);
+  try {
+    await job;
+  } finally {
+    encoding.delete(key);
+  }
+  return { ...result, cached: false };
+}
 
+/** One ffmpeg pass: filter chain once, split, trim each piece, encode each piece. */
+async function encodePieces({ seg, inputArgs, chain, outs, draft }) {
   const graph =
     `[0:v]${chain},split=${outs.length}${outs.map((_, i) => `[p${i}]`).join('')};` +
     outs.map((o, i) => `[p${i}]trim=start_frame=${o.start}:end_frame=${o.end},setpts=N/(${FPS}*TB)[o${i}]`).join(';');
-  const tmps = outs.map((o) => o.file.replace(/\.mp4$/, '.part.mp4'));
+  const tmps = outs.map((o) => o.file.replace(/\.mp4$/, `.${process.pid}.part.mp4`));
   await ffmpeg(
     [
       ...inputArgs,
@@ -142,11 +158,10 @@ export async function encodeClip(seg, visual, { cacheDir, workDir, settings, dra
         tmps[i],
       ]),
     ],
-    { totalFrames: L, label: seg.label },
+    { totalFrames: seg.L, label: seg.label },
   );
   outs.forEach((o, i) => {
     if (!existsSync(tmps[i])) fail(`${seg.label}: ffmpeg produced no ${o.name} clip`);
     renameSync(tmps[i], o.file);
   });
-  return { ...result, cached: false };
 }
