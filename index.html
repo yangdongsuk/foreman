@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Foreman · An AI agent on a smart-contract leash</title>
+<meta name="description" content="Foreman runs freelance contracts for a small business. The AI agent decides, the smart contract enforces spending limits, and every decision is hash-committed on Arc.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23111827'/><path d='M9 23V9h9a4.5 4.5 0 0 1 0 9h-4' fill='none' stroke='%23fbbf24' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="#top" aria-label="Foreman home">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" class="brand-bg"/><path d="M9 23V9h9a4.5 4.5 0 0 1 0 9h-4" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <b>Foreman</b>
+  </a>
+  <nav class="links" aria-label="Sections">
+    <a href="#mandate">Mandate</a>
+    <a href="#jobs">Jobs</a>
+    <a href="#decisions">Decisions</a>
+    <a href="#spend">Tool spend</a>
+  </nav>
+  <span id="net" class="pill">Arc mainnet</span>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <p class="eyebrow">Built on Arc · USDC-native</p>
+    <h1>An AI agent runs your freelance contracts, inside spending limits that a <em>smart contract</em> enforces.</h1>
+    <p class="lede">Foreman reviews milestone deliveries, pays for its own research with tiny USDC vouchers, and approves, rejects or escalates. The limits live on-chain, so a confused or compromised model still cannot move more money than you allowed.</p>
+    <ol class="flow" aria-label="How it works">
+      <li><b>Escrow holds the money.</b> The agent never holds job funds.</li>
+      <li><b>Agent investigates.</b> It buys evidence per call from a priced tool catalog.</li>
+      <li><b>Contract checks the limits.</b> Per-approval cap, daily cap, kill switch.</li>
+      <li><b>Every decision is hash-committed.</b> Check it yourself below.</li>
+    </ol>
+  </section>
+
+  <div id="banner" class="banner" hidden></div>
+
+  <section id="mandate" class="block">
+    <div class="block-head">
+      <h2>Mandate</h2>
+      <p>What the agent is allowed to do, read live from the policy contract.</p>
+    </div>
+    <div id="policy" class="card" aria-live="polite"><p class="muted">Loading…</p></div>
+  </section>
+
+  <section id="jobs" class="block">
+    <div class="block-head">
+      <h2>Jobs</h2>
+      <p>Funded through the policy contract; milestones are held by Stagepay escrow.</p>
+    </div>
+    <div id="job-list" class="stack"><p class="muted">Loading…</p></div>
+  </section>
+
+  <section id="decisions" class="block">
+    <div class="block-head">
+      <h2>Decision timeline</h2>
+      <p>Each decision's JSON record is hashed in your browser and compared with the <code>reasonHash</code> written on chain.</p>
+    </div>
+    <div id="timeline" class="timeline"><p class="muted">Loading…</p></div>
+  </section>
+
+  <section id="spend" class="block">
+    <div class="block-head">
+      <h2>Tool spend</h2>
+      <p>The agent pays for each tool call from a Tollgate channel, signing with an unfunded session key. Its maximum spend is the channel balance.</p>
+    </div>
+    <div id="spend-card" class="card"><p class="muted">Loading…</p></div>
+  </section>
+</main>
+
+<footer class="foot">
+  <span>Network fees on Arc are paid in USDC, about a cent per transaction.</span>
+  <span id="foot-links"></span>
+</footer>
+<script>
+  // ES modules cannot load from file:// in most browsers; say so instead of showing an empty page.
+  if (location.protocol === 'file:') document.getElementById('banner').outerHTML =
+    '<div class="banner"><p><b>Open this page over HTTP.</b> Browsers block ES modules on file://. Run <code>python3 -m http.server -d web</code> and visit http://localhost:8000.</p></div>';
+</script>
+<noscript><p class="banner">The dashboard needs JavaScript to read the chain.</p></noscript>
+<script type="module" src="app.js"></script>
+</body>
+</html>
