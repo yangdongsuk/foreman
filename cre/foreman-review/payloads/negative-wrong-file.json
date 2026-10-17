@@ -1,0 +1,11 @@
+{
+  "jobId": 2,
+  "index": 0,
+  "deliverableUrl": "https://github.com/yangdongsuk/foreman/pull/1",
+  "criteria": [
+    "The pull request targets the yangdongsuk/foreman repository and adds a file named README.fr.md at the repository root.",
+    "README.fr.md is a complete French translation of README.md."
+  ],
+  "amountUnits": 50000,
+  "revisionsUsed": 1
+}

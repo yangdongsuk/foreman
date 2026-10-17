@@ -1,0 +1,7 @@
+{
+  "receiverAddress": "0xD069469B0828bACB492a18614f93159D255b0E6d",
+  "chainSelectorName": "arc-testnet",
+  "gasLimit": "500000",
+  "geminiModel": "gemini-3.5-flash",
+  "httpTimeout": "8s"
+}

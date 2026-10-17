@@ -1,0 +1,14 @@
+{
+  "jobId": 2,
+  "index": 0,
+  "deliverableUrl": "https://github.com/yangdongsuk/foreman/pull/1",
+  "criteria": [
+    "The pull request targets the yangdongsuk/foreman repository and adds a file named README.ko.md at the repository root.",
+    "README.ko.md contains a Korean heading or section corresponding to every heading in the current README.md, in the same order, with none omitted.",
+    "The limits table from README.md is present in README.ko.md as a Markdown table with the same rows and numeric values as the original, with labels and descriptions translated into Korean.",
+    "The prose of README.ko.md is written in Korean (Hangul) rather than left in English, apart from code blocks, commands, URLs, and product or technical names such as Foreman and USDC.",
+    "Code blocks, commands and links in README.ko.md match those in README.md, and the pull request changes no file other than README.ko.md, apart from an optional link to it in README.md."
+  ],
+  "amountUnits": 50000,
+  "revisionsUsed": 1
+}
